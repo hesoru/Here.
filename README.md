@@ -6,6 +6,8 @@ My project is an application for caregivers to check their children in and out o
 
 ## User Stories
 
+- The application should be password-protected, with different passwords for staff and each caregiver
+
 As childcare staff, I want to be able to:
 - Add a caregiver to the list of caregivers in the childcare program
 - Add a child to the list of children in the childcare program
@@ -24,5 +26,3 @@ As a caregiver, I want to be able to:
   - Select the reason for my child(ren)'s absence(s)
 - Add a caregiver that is authorized to pick up my child(ren)
 - Select if a non-primary caregiver will be picking up my child(ren)
-
-- The application should be password-protected, with different passwords for staff and each caregiver
