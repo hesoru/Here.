@@ -18,8 +18,8 @@ class ChildTest {
     private Child c1;
     private Child c2;
     private Child c3;
-    private List<Caregiver> authorized1;
-    private List<Caregiver> authorized2;
+    private List<Caregiver> authorizedC1C2;
+    private List<Caregiver> authorizedC3;
 
     @BeforeEach
     public void setup() {
@@ -32,50 +32,51 @@ class ChildTest {
         c2 = new Child("David Lovelace", cg1);
         c3 = new Child("Emily Smith", cg2);
 
-        authorized1 = new ArrayList<>();
-        authorized2 = new ArrayList<>();
-        authorized1.add(cg1);
-        authorized2.add(cg2);
+        authorizedC1C2 = new ArrayList<>();
+        authorizedC3 = new ArrayList<>();
+
+        authorizedC1C2.add(cg1);
+        authorizedC3.add(cg2);
     }
 
     @Test
     public void testConstructor() {
         assertEquals("Jane Lovelace", c1.getChildFullName());
         assertEquals(cg1, c1.getPrimaryCaregiver());
-        assertEquals(authorized1, c1.getAuthorizedToPickUp());
+        assertEquals(authorizedC1C2, c1.getAuthorizedToPickUp());
         assertEquals(null, c1.getCheckInTime());
         assertEquals(null, c1.getCheckOutTime());
 
         assertEquals("David Lovelace", c2.getChildFullName());
         assertEquals(cg1, c2.getPrimaryCaregiver());
-        assertEquals(authorized1, c2.getAuthorizedToPickUp());
+        assertEquals(authorizedC1C2, c2.getAuthorizedToPickUp());
         assertEquals(null, c2.getCheckInTime());
         assertEquals(null, c2.getCheckOutTime());
 
         assertEquals("Emily Smith", c3.getChildFullName());
         assertEquals(cg2, c3.getPrimaryCaregiver());
-        assertEquals(authorized2, c3.getAuthorizedToPickUp());
+        assertEquals(authorizedC3, c3.getAuthorizedToPickUp());
         assertEquals(null, c3.getCheckInTime());
         assertEquals(null, c3.getCheckOutTime());
     }
 
     @Test
-    public void addAuthorizedToPickUpTest() {
-        authorized1.add(cg3);
-        authorized2.add(cg4);
+    public void testAddAuthorizedToPickUp() {
+        authorizedC1C2.add(cg3);
+        authorizedC3.add(cg4);
 
         c1.addAuthorizedToPickUp(cg3);
-        assertEquals(authorized1, c1.getAuthorizedToPickUp());
+        assertEquals(authorizedC1C2, c1.getAuthorizedToPickUp());
 
         c2.addAuthorizedToPickUp(cg3);
-        assertEquals(authorized1, c2.getAuthorizedToPickUp());
+        assertEquals(authorizedC1C2, c2.getAuthorizedToPickUp());
 
         c3.addAuthorizedToPickUp(cg4);
-        assertEquals(authorized2, c3.getAuthorizedToPickUp());
+        assertEquals(authorizedC3, c3.getAuthorizedToPickUp());
     }
 
     @Test
-    public void setCheckInTimeTest() {
+    public void testSetCheckInTime() {
         LocalTime t1 = LocalTime.now();
 
         c1.setCheckInTime(t1);
@@ -90,7 +91,7 @@ class ChildTest {
     }
 
     @Test
-    public void setCheckOutTimeTest() {
+    public void testSetCheckOutTime() {
         LocalTime t1 = LocalTime.now();
 
         c1.setCheckOutTime(t1);

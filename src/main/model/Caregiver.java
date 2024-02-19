@@ -1,6 +1,6 @@
 package model;
 
-// contains information pertaining to caregiver of child on attendance sheet
+// Contains information pertaining to caregiver of child on child registry/attendance sheet
 public class Caregiver {
 
     private final String fullName;

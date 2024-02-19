@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-// contains information pertaining to child on attendance sheet
+// Contains information pertaining to child on child registry/attendance sheet
 public class Child {
 
     private final String fullName;
@@ -25,9 +25,9 @@ public class Child {
         this.checkOutTime = null;
     }
 
-    // REQUIRES: authorizedToPickUp exists in caregiverRegistry.
+    // REQUIRES: authorizedToPickUp exists in caregiverRegistry (!null).
     // MODIFIES: this
-    // EFFECTS: Adds caregiver to list of authorized pickup list of child.
+    // EFFECTS: Adds caregiver to authorizedToPickUp list of child.
     public void addAuthorizedToPickUp(Caregiver authorizedToPickUp) {
         this.authorizedToPickUp.add(authorizedToPickUp);
     }
