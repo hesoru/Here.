@@ -66,6 +66,17 @@ public class AttendanceSheet {
     }
 
     // REQUIRES: child exists (!null).
+    // EFFECTS: Returns true if child is in notCheckedIn, otherwise returns false.
+    public boolean childIsNotCheckedIn(Child child) {
+        for (Child c : notCheckedIn) {
+            if (child == c) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // REQUIRES: child exists (!null).
     // MODIFIES: this, Child, Caregiver (Caregiver only if caregiver entered not found in caregiverRegistry)
     // EFFECTS: If given caregiver does not exist (null), returns "caregiver null". If given caregiver is authorized to
     //          pick up the given child and the child is in checkedIn, checks out the given child by moving them to the
@@ -97,15 +108,14 @@ public class AttendanceSheet {
     //          notCheckedIn, checkedIn, and checkedOut list; adds all children in the given childRegistry to the
     //          notCheckedIn list; and returns true. Otherwise, returns false.
     public boolean reset(String confirmChoice, List<Child> childRegistry) {
-        if (confirmChoice.equals("yes")) {
-            notCheckedIn.clear();
-            checkedIn.clear();
-            checkedOut.clear();
-            notCheckedIn.addAll(childRegistry);
-            return true;
-        } else {
+        if (!confirmChoice.equals("yes")) {
             return false;
         }
+        notCheckedIn.clear();
+        checkedIn.clear();
+        checkedOut.clear();
+        notCheckedIn.addAll(childRegistry);
+        return true;
     }
 
     public List<Child> getNotCheckedIn() {

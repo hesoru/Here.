@@ -125,15 +125,14 @@ public class AttendanceApp {
     private void addNewChildToRegistry() {
         System.out.println("Enter full name of child (First Last) and press Enter:");
         String childFullName = scanner.nextLine();
-        Child child = registry.selectChild(childFullName);
 
         System.out.println("Enter full name of primary caregiver (First Last) for " + childFullName
                 + " and press Enter:");
         String primaryCaregiverFullName = scanner.nextLine();
 
-        boolean childAdded = registry.addNewChild(childFullName, primaryCaregiverFullName);
+        Child child = registry.addNewChild(childFullName, primaryCaregiverFullName);
 
-        if (childAdded) {
+        if (child != null) {
             System.out.println(childFullName + " added to child registry.");
             attendanceSheet.notCheckedIn(child);
             System.out.println(childFullName + " is not checked in.\n");
@@ -215,9 +214,10 @@ public class AttendanceApp {
         String childFullName = scanner.nextLine();
         Child child = registry.selectChild(childFullName);
 
-        boolean childFound = attendanceSheet.checkIn(child);
+        boolean childFound = attendanceSheet.childIsNotCheckedIn(child);
 
         if (childFound) {
+            attendanceSheet.checkIn(child);
             System.out.println(childFullName + " checked in at " + child.getCheckInTime() + ".\n");
         } else {
             System.out.println(childFullName + " not found in list of children not yet checked in.\n");

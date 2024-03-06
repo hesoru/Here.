@@ -30,14 +30,14 @@ public class Registry {
     //          (case-sensitive). If primaryCaregiver exists (!null), creates new child using given arguments, then adds
     //          child to the child registry and returns true. If primaryCaregiver is not found in caregiverRegistry,
     //          returns false.
-    public boolean addNewChild(String childFullName, String primaryCaregiverFullName) {
+    public Child addNewChild(String childFullName, String primaryCaregiverFullName) {
         Caregiver primaryCaregiver = selectCaregiver(primaryCaregiverFullName);
         if (primaryCaregiver != null) {
             Child child = new Child(childFullName, primaryCaregiver);
             childRegistry.add(child);
-            return true;
+            return child;
         }
-        return false;
+        return null;
     }
 
     // REQUIRES: caregiverFullName is first and last name separated by a space (case-sensitive).
