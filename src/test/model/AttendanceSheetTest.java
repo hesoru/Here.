@@ -167,6 +167,19 @@ public class AttendanceSheetTest {
     }
 
     @Test
+    public void testChildIsNotCheckedInTrue() {
+        assertTrue(attendanceSheet.childIsNotCheckedIn(c1));
+        assertTrue(attendanceSheet.childIsNotCheckedIn(c2));
+        assertTrue(attendanceSheet.childIsNotCheckedIn(c3));
+    }
+
+    @Test
+    public void testChildIsNotCheckedInFalse() {
+        assertFalse(attendanceSheet.childIsNotCheckedIn(c4));
+        assertFalse(attendanceSheet.childIsNotCheckedIn(c5));
+    }
+
+    @Test
     public void testCheckOutCaregiverNull() {
         assertTrue(attendanceSheet.checkIn(c1));
         assertTrue(attendanceSheet.checkIn(c2));

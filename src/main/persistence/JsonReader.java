@@ -193,23 +193,21 @@ public class JsonReader {
         }
     }
 
-    // REQUIRES: Child exists in childRegistry of registry.
+    // REQUIRES: Child exists in childRegistry of registry. List can only be "notCheckedIn", "checkedIn", and
+    //           "checkedOut".
     // MODIFIES: AttendanceSheet, Child
     // EFFECTS: Parses child from JSON object and finds matching child in registry to add to notCheckedIn, checkedIn, or
     // checkedOut (selected by argument of method) of attendance sheet.
     private void addChildFromRegistryToAttendanceSheet(AttendanceSheet attendanceSheet, Registry registry,
                                                        JSONObject nextChild, String list) {
         Child registryChild = parseChildFromRegistry(nextChild, registry);
-        switch (list) {
-            case "notCheckedIn":
-                attendanceSheet.addNotCheckedIn(registryChild);
-                break;
-            case "checkedIn":
-                attendanceSheet.addCheckedIn(registryChild);
-                break;
-            case "checkedOut":
-                attendanceSheet.addCheckedOut(registryChild);
-                break;
+        String listToAdd = list;
+        if (listToAdd.equals("notCheckedIn")) {
+            attendanceSheet.addNotCheckedIn(registryChild);
+        } else if (listToAdd.equals("checkedIn")) {
+            attendanceSheet.addCheckedIn(registryChild);
+        } else {
+            attendanceSheet.addCheckedOut(registryChild);
         }
     }
 
