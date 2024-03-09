@@ -2,15 +2,20 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 // Contains child registry of children on attendance sheet, and caregiver registry of children's caregivers
-public class Registry {
+public class Registry implements Writable {
 
+    private final String name;
     private final List<Child> childRegistry;
     private final List<Caregiver> caregiverRegistry;
 
-    // EFFECTS: Creates new instance of Registry (with childRegistry and caregiverRegistry).
-    public Registry() {
+    // EFFECTS: Creates new instance of Registry with a given name, childRegistry, and caregiverRegistry.
+    public Registry(String name) {
+        this.name = name;
         this.childRegistry = new ArrayList<>();
         this.caregiverRegistry = new ArrayList<>();
     }
@@ -28,8 +33,8 @@ public class Registry {
     // MODIFIES: this, Child
     // EFFECTS: Searches caregiver registry for caregiver with full name matching primaryCaregiverFullName
     //          (case-sensitive). If primaryCaregiver exists (!null), creates new child using given arguments, then adds
-    //          child to the child registry and returns true. If primaryCaregiver is not found in caregiverRegistry,
-    //          returns false.
+    //          child to the child registry and returns child. If primaryCaregiver is not found in caregiverRegistry,
+    //          returns null.
     public Child addNewChild(String childFullName, String primaryCaregiverFullName) {
         Caregiver primaryCaregiver = selectCaregiver(primaryCaregiverFullName);
         if (primaryCaregiver != null) {
@@ -45,7 +50,7 @@ public class Registry {
     //          Returns caregiver if found, otherwise returns null.
     public Caregiver selectCaregiver(String caregiverFullName) {
         for (Caregiver c : caregiverRegistry) {
-            if (c.getCaregiverFullName().equals(caregiverFullName)) {
+            if (c.getFullName().equals(caregiverFullName)) {
                 return c;
             }
         }
@@ -57,7 +62,7 @@ public class Registry {
     //          child if found, otherwise returns null.
     public Child selectChild(String childFullName) {
         for (Child c : childRegistry) {
-            if (c.getChildFullName().equals(childFullName)) {
+            if (c.getFullName().equals(childFullName)) {
                 return c;
             }
         }
@@ -77,7 +82,7 @@ public class Registry {
 
         for (Child c : childRegistry) {
             if (c.getPrimaryCaregiver() == caregiver) {
-                return c.getChildFullName();
+                return c.getFullName();
             }
         }
 
@@ -102,6 +107,51 @@ public class Registry {
             return "child removed";
         }
         return "choice not confirmed";
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("childRegistry", childRegistryToJson());
+        json.put("caregiverRegistry", caregiverRegistryToJson());
+        return json;
+    }
+
+    // EFFECTS: returns children in child registry as a JSON array
+    private JSONArray childRegistryToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Child c : childRegistry) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: returns caregiver in caregiver registry as a JSON array
+    private JSONArray caregiverRegistryToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Caregiver c : caregiverRegistry) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
+    }
+
+    // REQUIRES: child exists (!= null)
+    // MODIFIES: this
+    // EFFECTS: Adds given child to child registry.
+    public void addChildToRegistry(Child child) {
+        childRegistry.add(child);
+    }
+
+    // REQUIRES: caregiver exists (!= null)
+    // MODIFIES: this
+    // EFFECTS: Adds given caregiver to caregiver registry.
+    public void addCaregiverToRegistry(Caregiver caregiver) {
+        caregiverRegistry.add(caregiver);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<Child> getChildRegistry() {

@@ -4,7 +4,11 @@ import model.AttendanceSheet;
 import model.Caregiver;
 import model.Child;
 import model.Registry;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 // Represents the user interface of the attendance application
@@ -12,23 +16,41 @@ public class AttendanceApp {
 
     private Registry registry;
     private AttendanceSheet attendanceSheet;
+    private static final String JSON_STORE_ATTENDANCE = "./data/attendance_sheet.json";
+    private static final String JSON_STORE_REGISTRY = "./data/registry.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     private final Scanner scanner = new Scanner(System.in);
 
-    // EFFECTS: Creates a new instance of AttendanceApp (with registry and attendanceSheet) if the user enters the
-    //          correct password. Exits the program if the correct password is not entered.
+    // EFFECTS: Starts program if the user enters the correct password. Exits the program if the correct password is not
+    //          entered. Upon starting the program, asks user if they want to load app data from file or create a new
+    //          instance of AttendanceApp (with registry and attendanceSheet). If creating a new instance of
+    //          AttendanceApp, asks for attendanceSheet name and Registry name by user input.
     public AttendanceApp() {
         String password = "demo";
 
         System.out.println("Type in password and press Enter:");
-        String userInput = scanner.nextLine();
+        String userInputPassword = scanner.nextLine();
 
-        if (userInput.equals(password)) {
-            this.registry = new Registry();
-            this.attendanceSheet = new AttendanceSheet();
-            selectOption();
-        } else {
-            System.exit(0);
+        if (userInputPassword.equals(password)) {
+            System.out.println("Type the number of an option and press Enter:");
+            System.out.println("1. Load attendance sheet, child registry, and caregiver registry from file.");
+            System.out.println("2. Start new attendance sheet, child registry, and caregiver registry.");
+            int userInputChoice = (Integer.parseInt(scanner.nextLine()));
+            if (userInputChoice == 1) {
+                loadState();
+                selectOption();
+            } else {
+                System.out.println("Type in new registry name and press Enter:");
+                String registryName = scanner.nextLine();
+                System.out.println("Type in new attendance sheet name and press Enter:");
+                String attendanceSheetName = scanner.nextLine();
+                this.registry = new Registry(registryName);
+                this.attendanceSheet = new AttendanceSheet(attendanceSheetName);
+                this.jsonWriter = new JsonWriter(JSON_STORE_ATTENDANCE, JSON_STORE_REGISTRY);
+                this.jsonReader = new JsonReader(JSON_STORE_ATTENDANCE, JSON_STORE_REGISTRY);
+            }
         }
     }
 
@@ -45,11 +67,13 @@ public class AttendanceApp {
         System.out.println("7. View primary caregiver information for a child.");
         System.out.println("8. View caregivers authorized to pick up a child.");
         System.out.println("9. Check out child.");
-        System.out.println("10. Remove caregiver from caregiver registry.");
-        System.out.println("11. Remove child from child registry.");
+        System.out.println("10. Save attendance sheet, child registry, and caregiver registry to file.");
+        System.out.println("11. Load attendance sheet, child registry, and caregiver registry from file.");
+        System.out.println("12. Remove caregiver from caregiver registry.");
+        System.out.println("13. Remove child from child registry.");
     }
 
-    // REQUIRES: User input must be integer from 1 to 11.
+    // REQUIRES: User input must be integer from 1 to 13.
     // MODIFIES: this, Child, Caregiver (depending on option selected)
     // EFFECTS: Selects method to run based on number selected by user. Returns user to options at the end of every
     //          method selected.
@@ -88,9 +112,15 @@ public class AttendanceApp {
                     checkOutChild();
                     break;
                 case 10:
-                    removeCaregiverFromRegistry();
+                    saveState();
                     break;
                 case 11:
+                    loadState();
+                    break;
+                case 12:
+                    removeCaregiverFromRegistry();
+                    break;
+                case 13:
                     removeChildFromRegistry();
                     break;
             }
@@ -229,15 +259,15 @@ public class AttendanceApp {
     private void viewAttendance() {
         System.out.println("Not Yet Checked In:");
         for (Child c : attendanceSheet.getNotCheckedIn()) {
-            System.out.println(c.getChildFullName());
+            System.out.println(c.getFullName());
         }
         System.out.println("\n" + "Checked In:");
         for (Child c : attendanceSheet.getCheckedIn()) {
-            System.out.println(c.getChildFullName() + " (checked in at " + c.getCheckInTime() + ")");
+            System.out.println(c.getFullName() + " (checked in at " + c.getCheckInTime() + ")");
         }
         System.out.println("\n" + "Checked Out:");
         for (Child c : attendanceSheet.getCheckedOut()) {
-            System.out.println(c.getChildFullName() + " (checked out at " + c.getCheckOutTime() + ")" + "\n");
+            System.out.println(c.getFullName() + " (checked out at " + c.getCheckOutTime() + ")" + "\n");
         }
     }
 
@@ -250,9 +280,9 @@ public class AttendanceApp {
         String childFullName = scanner.nextLine();
         Child child = registry.selectChild(childFullName);
 
-        System.out.println("Primary Caregiver: " + child.getPrimaryCaregiver().getCaregiverFullName());
-        System.out.println("Phone Number: " + child.getPrimaryCaregiver().getCaregiverPhoneNum());
-        System.out.println("Email: " + child.getPrimaryCaregiver().getCaregiverEmail() + "\n");
+        System.out.println("Primary Caregiver: " + child.getPrimaryCaregiver().getFullName());
+        System.out.println("Phone Number: " + child.getPrimaryCaregiver().getPhoneNum());
+        System.out.println("Email: " + child.getPrimaryCaregiver().getEmail() + "\n");
     }
 
     // REQUIRES: childFullName is first and last name separated by a space (case-sensitive), and child exists in
@@ -267,9 +297,9 @@ public class AttendanceApp {
 
         System.out.println("Caregivers authorized to pick up " + childFullName + ":" + "\n");
         for (Caregiver c : child.getAuthorizedToPickUp()) {
-            System.out.println("Caregiver: " + c.getCaregiverFullName());
-            System.out.println("Phone Number: " + c.getCaregiverPhoneNum());
-            System.out.println("Email: " + c.getCaregiverEmail() + "\n");
+            System.out.println("Caregiver: " + c.getFullName());
+            System.out.println("Phone Number: " + c.getPhoneNum());
+            System.out.println("Email: " + c.getEmail() + "\n");
         }
     }
 
@@ -309,6 +339,36 @@ public class AttendanceApp {
         } else {
             System.out.println(childFullName + " has not been checked in today.");
             System.out.println(caregiverFullName + " is not authorized to pick up " + childFullName + "!\n");
+        }
+    }
+
+    // EFFECTS: saves the attendance sheet and registry to file
+    private void saveState() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(attendanceSheet, registry);
+            jsonWriter.close();
+            System.out.println("Saved " + attendanceSheet.getName() + " attendance sheet to "
+                    + JSON_STORE_ATTENDANCE + "\n");
+            System.out.println("Saved " + registry.getName() + " registry to " + JSON_STORE_REGISTRY + "\n");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file:" + JSON_STORE_ATTENDANCE + " and "
+                    + JSON_STORE_REGISTRY + "\n");
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads attendance sheet and registry from file
+    private void loadState() {
+        try {
+            this.registry = jsonReader.readRegistry();
+            this.attendanceSheet = jsonReader.readAttendance(registry);
+            System.out.println("Loaded " + attendanceSheet.getName() + " attendance sheet from "
+                    + JSON_STORE_ATTENDANCE + "\n");
+            System.out.println("Loaded " + registry.getName() + " registry from " + JSON_STORE_REGISTRY + "\n");
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE_ATTENDANCE + " and "
+                    + JSON_STORE_REGISTRY + "\n");
         }
     }
 
@@ -352,14 +412,14 @@ public class AttendanceApp {
         String childFullName = scanner.nextLine();
         Child child = registry.selectChild(childFullName);
 
-        System.out.println("Are you sure you want to remove " + child.getChildFullName() + " from the child registry?");
+        System.out.println("Are you sure you want to remove " + child.getFullName() + " from the child registry?");
         System.out.println("Type 'yes' and press Enter to remove child.");
         System.out.println("Type anything else and press Enter to return to options.");
         String confirmChoice = scanner.nextLine();
 
         String childRemoved = registry.removeChild(childFullName, confirmChoice);
         if (childRemoved.equals("child removed")) {
-            System.out.println(child.getChildFullName() + " removed from the child registry.\n");
+            System.out.println(child.getFullName() + " removed from the child registry.\n");
         } else {
             System.out.println("Returning to options.\n");
         }

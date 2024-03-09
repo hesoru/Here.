@@ -30,12 +30,12 @@ public class AttendanceSheetTest {
 
     @BeforeEach
     public void setup() {
-        attendanceSheetEmpty = new AttendanceSheet();
-        attendanceSheet = new AttendanceSheet();
+        attendanceSheetEmpty = new AttendanceSheet("Field Trip");
+        attendanceSheet = new AttendanceSheet("Class Attendance");
 
         emptyLinkedList = new LinkedList();
 
-        registry = new Registry();
+        registry = new Registry("CPSC 210");
 
         cg1 = new Caregiver("Ada Lovelace", 7788221234L, "alovelace@gmail.com");
         cg2 = new Caregiver("John Smith", 6043456789L, "jsmith@yahoo.ca");
@@ -65,6 +65,7 @@ public class AttendanceSheetTest {
 
     @Test
     public void testConstructor() {
+        assertEquals("Field Trip", attendanceSheetEmpty.getName());
         assertEquals(emptyLinkedList, attendanceSheetEmpty.getNotCheckedIn());
         assertEquals(emptyLinkedList, attendanceSheetEmpty.getCheckedIn());
         assertEquals(emptyLinkedList, attendanceSheetEmpty.getCheckedOut());
@@ -259,4 +260,36 @@ public class AttendanceSheetTest {
         assertEquals(emptyLinkedList, attendanceSheetEmpty.getCheckedOut());
     }
 
+    @Test
+    public void testAddNotCheckedIn() {
+        attendanceSheetEmpty.addNotCheckedIn(c1);
+        attendanceSheetEmpty.addNotCheckedIn(c2);
+        attendanceSheetEmpty.addNotCheckedIn(c3);
+
+        assertTrue(attendanceSheetEmpty.childIsNotCheckedIn(c1));
+        assertTrue(attendanceSheetEmpty.childIsNotCheckedIn(c2));
+        assertTrue(attendanceSheetEmpty.childIsNotCheckedIn(c3));
+    }
+
+    @Test
+    public void testAddCheckedIn() {
+        attendanceSheetEmpty.addCheckedIn(c1);
+        attendanceSheetEmpty.addCheckedIn(c2);
+        attendanceSheetEmpty.addCheckedIn(c3);
+
+        assertTrue(attendanceSheetEmpty.childIsCheckedIn(c1));
+        assertTrue(attendanceSheetEmpty.childIsCheckedIn(c2));
+        assertTrue(attendanceSheetEmpty.childIsCheckedIn(c3));
+    }
+
+    @Test
+    public void testAddCheckedOut() {
+        attendanceSheetEmpty.addCheckedOut(c1);
+        attendanceSheetEmpty.addCheckedOut(c2);
+        attendanceSheetEmpty.addCheckedOut(c3);
+
+        assertEquals(c1, attendanceSheetEmpty.getCheckedOut().get(0));
+        assertEquals(c2, attendanceSheetEmpty.getCheckedOut().get(1));
+        assertEquals(c3, attendanceSheetEmpty.getCheckedOut().get(2));
+    }
 }

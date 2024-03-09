@@ -23,6 +23,20 @@ As childcare staff, I want to be able to:
 - View the names of the children that have not yet checked in, checked in, and checked out
 - Check out a child, and select the authorized caregiver that picked up the child
 
+**Data Persistence**
+
+As childcare staff, I want to have the option to:
+- Save these data to file and load these data from file:
+  - Caregiver registry
+  - Childcare registry
+  - Attendance sheet
+- Save the entire state of the application: attendance sheet, childcare registry, and caregiver registry
+- Reload a saved state of the application from file
+
+As childcare staff, I want to be prompted and given the option to:
+- Save when quitting the application
+- Load an application state from file when starting the application
+
 **The caregiver-facing side of the app requires use of a server, so I will omit the user stories below from the project.**
 
 ~~As a caregiver, I want to be able to:~~

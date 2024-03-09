@@ -1,18 +1,25 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 
-// Contains attendance sheet with children that are not checked in, checked in, and checked out
-public class AttendanceSheet {
+// Contains attendance sheet with name and children that are not checked in, checked in, and checked out.
+public class AttendanceSheet implements Writable {
 
+    private final String name;
     private final List<Child> notCheckedIn;
     private final List<Child> checkedIn;
     private final List<Child> checkedOut;
 
-    // EFFECTS: Creates new instance of AttendanceSheet (with list of notCheckedIn, checkedIn, and checkedOut).
-    public AttendanceSheet() {
+    // EFFECTS: Creates new instance of AttendanceSheet with a given name (with list of notCheckedIn, checkedIn, and
+    //          checkedOut).
+    public AttendanceSheet(String name) {
+        this.name = name;
         this.notCheckedIn = new LinkedList<>();
         this.checkedIn = new LinkedList<>();
         this.checkedOut = new LinkedList<>();
@@ -116,6 +123,68 @@ public class AttendanceSheet {
         checkedOut.clear();
         notCheckedIn.addAll(childRegistry);
         return true;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("notCheckedIn", notCheckedInToJson());
+        json.put("checkedIn", checkedInToJson());
+        json.put("checkedOut", checkedOutToJson());
+        return json;
+    }
+
+    // EFFECTS: returns children in notCheckedIn as a JSON array
+    private JSONArray notCheckedInToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Child c : notCheckedIn) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: returns children in checkedIn as a JSON array
+    private JSONArray checkedInToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Child c : checkedIn) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: returns children in checkedOut as a JSON array
+    private JSONArray checkedOutToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Child c : checkedOut) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
+    }
+
+    // REQUIRES: child exists (!null).
+    // MODIFIES: this
+    // EFFECTS: Adds given child to not checked in list on attendance sheet.
+    public void addNotCheckedIn(Child child) {
+        notCheckedIn.add(child);
+    }
+
+    // REQUIRES: child exists (!null).
+    // MODIFIES: this
+    // EFFECTS: Adds given child to checked in list on attendance sheet.
+    public void addCheckedIn(Child child) {
+        checkedIn.add(child);
+    }
+
+    // REQUIRES: child exists (!null).
+    // MODIFIES: this
+    // EFFECTS: Adds given child to checked out list on attendance sheet.
+    public void addCheckedOut(Child child) {
+        checkedOut.add(child);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<Child> getNotCheckedIn() {

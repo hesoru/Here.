@@ -30,9 +30,9 @@ public class RegistryTest {
     public void setup() {
         emptyArrayList = new ArrayList();
 
-        registryEmpty = new Registry();
-        registryNoChildren = new Registry();
-        registry = new Registry();
+        registryEmpty = new Registry("Field Trip");
+        registryNoChildren = new Registry("Class Attendance");
+        registry = new Registry("CPSC 210");
 
         cg1 = new Caregiver("Ada Lovelace", 7788221234L, "alovelace@gmail.com");
         cg2 = new Caregiver("John Smith", 6043456789L, "jsmith@yahoo.ca");
@@ -65,57 +65,62 @@ public class RegistryTest {
 
     @Test
     public void testConstructor() {
+        assertEquals("Field Trip", registryEmpty.getName());
         assertEquals(emptyArrayList, registryEmpty.getChildRegistry());
         assertEquals(emptyArrayList, registryEmpty.getCaregiverRegistry());
     }
 
     @Test
-    public void addNewCaregiver() {
+    public void testAddNewCaregiver() {
         registryEmpty.addNewCaregiver("Ada Lovelace", 7788221234L, "alovelace@gmail.com");
-        assertEquals("Ada Lovelace", registryEmpty.getCaregiverRegistry().get(0).getCaregiverFullName());
+        assertEquals("Ada Lovelace", registryEmpty.getCaregiverRegistry().get(0).getFullName());
 
         registryEmpty.addNewCaregiver("John Smith", 6043456789L, "jsmith@yahoo.ca");
-        assertEquals("John Smith", registryEmpty.getCaregiverRegistry().get(1).getCaregiverFullName());
+        assertEquals("John Smith", registryEmpty.getCaregiverRegistry().get(1).getFullName());
 
         registryEmpty.addNewCaregiver("Adam Lovelace", 7788225678L, "adaml@gmail.com");
-        assertEquals("Adam Lovelace", registryEmpty.getCaregiverRegistry().get(2).getCaregiverFullName());
+        assertEquals("Adam Lovelace", registryEmpty.getCaregiverRegistry().get(2).getFullName());
 
         registryEmpty.addNewCaregiver("Charlie Santos", 6041234567L, "charlesss@yahoo.ca");
-        assertEquals("Charlie Santos", registryEmpty.getCaregiverRegistry().get(3).getCaregiverFullName());
+        assertEquals("Charlie Santos", registryEmpty.getCaregiverRegistry().get(3).getFullName());
     }
 
     @Test
-    public void addNewChildSuccess() {
-        assertTrue(registryNoChildren.addNewChild("Jane Lovelace", cg1.getCaregiverFullName()));
-        assertEquals("Jane Lovelace", registryNoChildren.getChildRegistry().get(0).getChildFullName());
+    public void testAddNewChildSuccess() {
+        assertEquals(registryNoChildren.addNewChild("Jane Lovelace", cg1.getFullName()),
+                registryNoChildren.getChildRegistry().get(0));
+        assertEquals("Jane Lovelace", registryNoChildren.getChildRegistry().get(0).getFullName());
 
-        assertTrue(registryNoChildren.addNewChild("David Lovelace", cg1.getCaregiverFullName()));
-        assertEquals("David Lovelace", registryNoChildren.getChildRegistry().get(1).getChildFullName());
+        assertEquals(registryNoChildren.addNewChild("David Lovelace", cg1.getFullName()),
+                registryNoChildren.getChildRegistry().get(1));
+        assertEquals("David Lovelace", registryNoChildren.getChildRegistry().get(1).getFullName());
 
-        assertTrue(registryNoChildren.addNewChild("Emily Smith", cg2.getCaregiverFullName()));
-        assertEquals("Emily Smith", registryNoChildren.getChildRegistry().get(2).getChildFullName());
+        assertEquals(registryNoChildren.addNewChild("Emily Smith", cg2.getFullName()),
+                registryNoChildren.getChildRegistry().get(2));
+        assertEquals("Emily Smith", registryNoChildren.getChildRegistry().get(2).getFullName());
 
-        assertTrue(registryNoChildren.addNewChild("Lily Santos", cg4.getCaregiverFullName()));
-        assertEquals("Lily Santos", registryNoChildren.getChildRegistry().get(3).getChildFullName());
+        assertEquals(registryNoChildren.addNewChild("Lily Santos", cg4.getFullName()),
+                registryNoChildren.getChildRegistry().get(3));
+        assertEquals("Lily Santos", registryNoChildren.getChildRegistry().get(3).getFullName());
     }
 
     @Test
-    public void addNewChildCaregiverNull() {
-        assertFalse(registryEmpty.addNewChild("Jane Lovelace", null));
+    public void testAddNewChildCaregiverNull() {
+        assertEquals(null, registryEmpty.addNewChild("Jane Lovelace", null));
         assertEquals(emptyArrayList, registryEmpty.getChildRegistry());
 
-        assertFalse(registryEmpty.addNewChild("David Lovelace", null));
+        assertEquals(null, registryEmpty.addNewChild("David Lovelace", null));
         assertEquals(emptyArrayList, registryEmpty.getChildRegistry());
 
-        assertFalse(registryEmpty.addNewChild("Emily Smith", null));
+        assertEquals(null, registryEmpty.addNewChild("Emily Smith", null));
         assertEquals(emptyArrayList, registryEmpty.getChildRegistry());
 
-        assertFalse(registryEmpty.addNewChild("Lily Santos", null));
+        assertEquals(null, registryEmpty.addNewChild("Lily Santos", null));
         assertEquals(emptyArrayList, registryEmpty.getChildRegistry());
     }
 
     @Test
-    public void selectCaregiverNotFound() {
+    public void testSelectCaregiverNotFound() {
         assertEquals(null, registry.selectCaregiver("Bob Smith"));
         assertEquals(null, registry.selectCaregiver("Andy Richter"));
         assertEquals(null, registry.selectCaregiver("Angela Li"));
@@ -123,7 +128,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void selectCaregiverFound() {
+    public void testSelectCaregiverFound() {
         assertEquals(cg1, registry.selectCaregiver("Ada Lovelace"));
         assertEquals(cg2, registry.selectCaregiver("John Smith"));
         assertEquals(cg3, registry.selectCaregiver("Adam Lovelace"));
@@ -131,7 +136,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void selectChildNotFound() {
+    public void testSelectChildNotFound() {
         assertEquals(null, registry.selectChild("Ada Smith"));
         assertEquals(null, registry.selectChild("David Likert"));
         assertEquals(null, registry.selectChild("Elsa Meyers"));
@@ -139,7 +144,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void selectChildFound() {
+    public void testSelectChildFound() {
         assertEquals(c1, registry.selectChild("Jane Lovelace"));
         assertEquals(c2, registry.selectChild("David Lovelace"));
         assertEquals(c3, registry.selectChild("Emily Smith"));
@@ -147,7 +152,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void removeCaregiverPrimaryCaregiverFound() {
+    public void testRemoveCaregiverPrimaryCaregiverFound() {
         assertEquals("Jane Lovelace", registry.removeCaregiver("Ada Lovelace", "yes"));
         assertEquals("Emily Smith", registry.removeCaregiver("John Smith", "yes"));
         assertEquals("Lily Santos", registry.removeCaregiver("Charlie Santos", "yes"));
@@ -159,7 +164,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void removeCaregiverConfirmed() {
+    public void testRemoveCaregiverConfirmed() {
         assertEquals("caregiver removed", registry.removeCaregiver("Adam Lovelace", "yes"));
         assertEquals(cg4, registry.getCaregiverRegistry().get(2));
         assertEquals(4, registry.getCaregiverRegistry().size());
@@ -169,7 +174,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void removeCaregiverRejected() {
+    public void testRemoveCaregiverRejected() {
         assertEquals("choice not confirmed", registry.removeCaregiver("Adam Lovelace", "no?"));
         assertEquals("choice not confirmed", registry.removeCaregiver("Janet Smith", "why"));
 
@@ -179,7 +184,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void removeChildConfirmed() {
+    public void testRemoveChildConfirmed() {
         assertEquals("child removed", registry.removeChild("Jane Lovelace", "yes"));
         assertEquals(c2, registry.getChildRegistry().get(0));
         assertEquals(3, registry.getChildRegistry().size());
@@ -198,7 +203,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void removeChildRejected() {
+    public void testRemoveChildRejected() {
         assertEquals("choice not confirmed", registry.removeChild("Jane Lovelace", "no?"));
         assertEquals(c1, registry.getChildRegistry().get(0));
         assertEquals(4, registry.getChildRegistry().size());
@@ -215,4 +220,43 @@ public class RegistryTest {
         assertEquals(c4, registry.getChildRegistry().get(3));
         assertEquals(4, registry.getChildRegistry().size());
     }
+
+    @Test
+    public void testAddChildToRegistry() {
+        registryNoChildren.addChildToRegistry(c1);
+        assertEquals(c1, registryNoChildren.getChildRegistry().get(0));
+        assertEquals("Jane Lovelace", registryNoChildren.getChildRegistry().get(0).getFullName());
+
+        registryNoChildren.addChildToRegistry(c2);
+        assertEquals(c2, registryNoChildren.getChildRegistry().get(1));
+        assertEquals("David Lovelace", registryNoChildren.getChildRegistry().get(1).getFullName());
+
+        registryNoChildren.addChildToRegistry(c3);
+        assertEquals(c3, registryNoChildren.getChildRegistry().get(2));
+        assertEquals("Emily Smith", registryNoChildren.getChildRegistry().get(2).getFullName());
+
+        registryNoChildren.addChildToRegistry(c4);
+        assertEquals(c4, registryNoChildren.getChildRegistry().get(3));
+        assertEquals("Lily Santos", registryNoChildren.getChildRegistry().get(3).getFullName());
+    }
+
+    @Test
+    public void testAddCaregiverToRegistry() {
+        registryEmpty.addCaregiverToRegistry(cg1);
+        assertEquals(cg1, registryEmpty.getCaregiverRegistry().get(0));
+        assertEquals("Ada Lovelace", registryEmpty.getCaregiverRegistry().get(0).getFullName());
+
+        registryEmpty.addCaregiverToRegistry(cg2);
+        assertEquals(cg2, registryEmpty.getCaregiverRegistry().get(1));
+        assertEquals("John Smith", registryEmpty.getCaregiverRegistry().get(1).getFullName());
+
+        registryEmpty.addCaregiverToRegistry(cg3);
+        assertEquals(cg3, registryEmpty.getCaregiverRegistry().get(2));
+        assertEquals("Adam Lovelace", registryEmpty.getCaregiverRegistry().get(2).getFullName());
+
+        registryEmpty.addCaregiverToRegistry(cg4);
+        assertEquals(cg4, registryEmpty.getCaregiverRegistry().get(3));
+        assertEquals("Charlie Santos", registryEmpty.getCaregiverRegistry().get(3).getFullName());
+    }
+
 }

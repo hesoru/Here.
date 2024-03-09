@@ -1,0 +1,223 @@
+package persistence;
+
+import model.AttendanceSheet;
+import model.Caregiver;
+import model.Child;
+import model.Registry;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalTime;
+import java.util.stream.Stream;
+
+public class JsonReader {
+    private final String attendanceSource;
+    private final String registrySource;
+
+    // EFFECTS: Constructs reader to read from source files for attendance sheet and registry.
+    public JsonReader(String attendanceSource, String registrySource) {
+        this.attendanceSource = attendanceSource;
+        this.registrySource = registrySource;
+    }
+
+    // EFFECTS: Reads source file as string and returns it.
+    private String readFile(String source) throws IOException {
+        StringBuilder contentBuilder = new StringBuilder();
+        try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
+            stream.forEach(s -> contentBuilder.append(s));
+        }
+        return contentBuilder.toString();
+    }
+
+    // MODIFIES: Registry
+    // EFFECTS: Reads registry from file and returns it;
+    //          throws IOException if an error occurs reading data from file.
+    public Registry readRegistry() throws IOException {
+        String registryJsonData = readFile(registrySource);
+        JSONObject registryJsonObject = new JSONObject(registryJsonData);
+        return parseRegistry(registryJsonObject);
+    }
+
+    // MODIFIES: Registry
+    // EFFECTS: Parses registry from JSON object and returns it.
+    private Registry parseRegistry(JSONObject registryJsonObject) {
+        String registryName = registryJsonObject.getString("name");
+        Registry registry = new Registry(registryName);
+        addPeopleToRegistry(registry, registryJsonObject);
+        return registry;
+    }
+
+    // MODIFIES: Registry, Child, Caregiver
+    // EFFECTS: Parses children from childRegistry and caregivers from caregiverRegistry from registry JSON object
+    //          then adds them to the appropriate registry (childRegistry or caregiverRegistry).
+    private void addPeopleToRegistry(Registry registry, JSONObject registryJsonObject) {
+        JSONArray jsonArrayCaregiverRegistry = registryJsonObject.getJSONArray("caregiverRegistry");
+        for (Object json : jsonArrayCaregiverRegistry) {
+            JSONObject nextCaregiver = (JSONObject) json;
+            addCaregiverToRegistry(registry, nextCaregiver);
+        }
+        JSONArray jsonArrayChildRegistry = registryJsonObject.getJSONArray("childRegistry");
+        for (Object json : jsonArrayChildRegistry) {
+            JSONObject nextChild = (JSONObject) json;
+            addChildToRegistry(registry, nextChild);
+        }
+    }
+
+    // MODIFIES: Registry, Caregiver
+    // EFFECTS: Parses caregiver from JSON object and adds them to registry.
+    private void addCaregiverToRegistry(Registry registry, JSONObject nextCaregiver) {
+        Caregiver caregiver = parseCaregiver(nextCaregiver);
+        registry.addCaregiverToRegistry(caregiver);
+    }
+
+    // MODIFIES: Caregiver
+    // EFFECTS: Parses caregiver from JSON object and returns it.
+    private Caregiver parseCaregiver(JSONObject caregiverJsonObject) {
+        String fullName = caregiverJsonObject.getString("fullName");
+        Long phoneNum = caregiverJsonObject.getLong("phoneNum");
+        String email = caregiverJsonObject.getString("email");
+        return (new Caregiver(fullName, phoneNum, email));
+    }
+
+    // MODIFIES: Registry, Child
+    // EFFECTS: Parses child from JSON object and adds them to registry.
+    private void addChildToRegistry(Registry registry, JSONObject nextChild) {
+        Child child = parseChild(nextChild, registry);
+        registry.addChildToRegistry(child);
+    }
+
+    // MODIFIES: Child
+    // EFFECTS: Parses child from JSON object and returns it.
+    private Child parseChild(JSONObject childJsonObject, Registry registry) {
+        String fullName = childJsonObject.getString("fullName");
+        Caregiver registryPrimaryCaregiver
+                = parseCaregiverFromRegistry(childJsonObject.getJSONObject("primaryCaregiver"), registry);
+        LocalTime checkInTime;
+        LocalTime checkOutTime;
+        if (!childJsonObject.isNull("checkInTime")) {
+            checkInTime = LocalTime.parse(childJsonObject.getString("checkInTime"));
+        } else {
+            checkInTime = null;
+        }
+        if (!childJsonObject.isNull("checkOutTime")) {
+            checkOutTime = LocalTime.parse(childJsonObject.getString("checkOutTime"));
+        } else {
+            checkOutTime = null;
+        }
+        Child child = new Child(fullName, null);
+        addPrimaryCaregiver(child, registryPrimaryCaregiver);
+        addMultipleSecondaryCaregivers(child, childJsonObject, registry);
+        child.setCheckInTime(checkInTime);
+        child.setCheckInTime(checkOutTime);
+        return child;
+    }
+
+    // REQUIRES: Caregiver exists in caregiverRegistry of registry.
+    // EFFECTS: Parses caregiver from JSON object and returns them from caregiverRegistry.
+    private Caregiver parseCaregiverFromRegistry(JSONObject caregiverJsonObject, Registry registry) {
+        Caregiver caregiver = parseCaregiver(caregiverJsonObject);
+        return registry.selectCaregiver(caregiver.getFullName());
+    }
+
+    // REQUIRES: primaryCaregiver exists.
+    // MODIFIES: Child
+    // EFFECTS: Sets given caregiver to given child's primaryCaregiver and addAuthorizedToPickUp.
+    private void addPrimaryCaregiver(Child child, Caregiver primaryCaregiver) {
+        child.setPrimaryCaregiver(primaryCaregiver);
+        child.addAuthorizedToPickUp(primaryCaregiver);
+    }
+
+    // REQUIRES: Every caregiver exists in caregiverRegistry of registry.
+    // MODIFIES: Child
+    // EFFECTS: Parses caregivers from authorizedToPickUp from JSON object and selects matching caregivers in registry
+    //          to add to the child's authorizedToPickUp.
+    private void addMultipleSecondaryCaregivers(Child child, JSONObject jsonObject, Registry registry) {
+        JSONArray jsonArray = jsonObject.getJSONArray("authorizedToPickUp");
+        for (Object json : jsonArray) {
+            JSONObject nextCaregiver = (JSONObject) json;
+            addSecondaryCaregiverFromRegistry(child, nextCaregiver, registry);
+        }
+    }
+
+    // REQUIRES: Caregiver exists in caregiverRegistry of registry.
+    // MODIFIES: Child
+    // EFFECTS: Parses caregiver from JSON object and selects matching caregiver from registry to add to the child's
+    //          authorizedToPickUp.
+    private void addSecondaryCaregiverFromRegistry(Child child, JSONObject jsonObject, Registry registry) {
+        Caregiver registryCaregiver = parseCaregiverFromRegistry(jsonObject, registry);
+        child.addAuthorizedToPickUp(registryCaregiver);
+    }
+
+
+    // MODIFIES: AttendanceSheet
+    // EFFECTS: Reads attendance sheet from file and returns it;
+    //          throws IOException if an error occurs reading data from file.
+    public AttendanceSheet readAttendance(Registry registry) throws IOException {
+        String attendanceJsonData = readFile(attendanceSource);
+        JSONObject attendanceJsonObject = new JSONObject(attendanceJsonData);
+        return parseAttendanceSheet(attendanceJsonObject, registry);
+    }
+
+    // EFFECTS: Parses attendance sheet from JSON object and returns it.
+    private AttendanceSheet parseAttendanceSheet(JSONObject attendanceJsonObject, Registry registry) {
+        String attendanceName = attendanceJsonObject.getString("name");
+        AttendanceSheet attendanceSheet = new AttendanceSheet(attendanceName);
+        addChildrenFromRegistryToAttendanceSheet(attendanceSheet, registry, attendanceJsonObject);
+        return attendanceSheet;
+    }
+
+    // REQUIRES: Every child exists in childRegistry of registry.
+    // MODIFIES: AttendanceSheet, Child
+    // EFFECTS: Parses children from notCheckedIn, checkedIn, or checkedOut in attendance sheet JSON object and adds
+    //          them to notCheckedIn, checkedIn, or checkedOut of attendance sheet.
+    private void addChildrenFromRegistryToAttendanceSheet(AttendanceSheet attendanceSheet, Registry registry,
+                                                          JSONObject jsonObject) {
+        JSONArray jsonArrayNotCheckedIn = jsonObject.getJSONArray("notCheckedIn");
+        for (Object json : jsonArrayNotCheckedIn) {
+            JSONObject nextChild = (JSONObject) json;
+            addChildFromRegistryToAttendanceSheet(attendanceSheet, registry, nextChild, "notCheckedIn");
+        }
+        JSONArray jsonArrayCheckedIn = jsonObject.getJSONArray("checkedIn");
+        for (Object json : jsonArrayCheckedIn) {
+            JSONObject nextChild = (JSONObject) json;
+            addChildFromRegistryToAttendanceSheet(attendanceSheet, registry, nextChild, "checkedIn");
+        }
+        JSONArray jsonArrayCheckedOut = jsonObject.getJSONArray("checkedOut");
+        for (Object json : jsonArrayCheckedOut) {
+            JSONObject nextChild = (JSONObject) json;
+            addChildFromRegistryToAttendanceSheet(attendanceSheet, registry, nextChild, "checkedOut");
+        }
+    }
+
+    // REQUIRES: Child exists in childRegistry of registry.
+    // MODIFIES: AttendanceSheet, Child
+    // EFFECTS: Parses child from JSON object and finds matching child in registry to add to notCheckedIn, checkedIn, or
+    // checkedOut (selected by argument of method) of attendance sheet.
+    private void addChildFromRegistryToAttendanceSheet(AttendanceSheet attendanceSheet, Registry registry,
+                                                       JSONObject nextChild, String list) {
+        Child registryChild = parseChildFromRegistry(nextChild, registry);
+        switch (list) {
+            case "notCheckedIn":
+                attendanceSheet.addNotCheckedIn(registryChild);
+                break;
+            case "checkedIn":
+                attendanceSheet.addCheckedIn(registryChild);
+                break;
+            case "checkedOut":
+                attendanceSheet.addCheckedOut(registryChild);
+                break;
+        }
+    }
+
+    // REQUIRES: Child exists in childRegistry of registry.
+    // EFFECTS: Parses child from JSON object and returns them from childRegistry.
+    private Child parseChildFromRegistry(JSONObject childJsonObject, Registry registry) {
+        Child child = parseChild(childJsonObject, registry);
+        return registry.selectChild(child.getFullName());
+    }
+
+}

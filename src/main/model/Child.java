@@ -3,12 +3,15 @@ package model;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import persistence.Writable;
 
 // Contains information pertaining to child on child registry/attendance sheet
-public class Child {
+public class Child implements Writable {
 
     private final String fullName;
-    private final Caregiver primaryCaregiver;
+    private Caregiver primaryCaregiver;
     private final List<Caregiver> authorizedToPickUp;
     private LocalTime checkInTime;
     private LocalTime checkOutTime;
@@ -25,6 +28,26 @@ public class Child {
         this.checkOutTime = null;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("fullName", fullName);
+        json.put("primaryCaregiver", primaryCaregiver.toJson());
+        json.put("authorizedToPickUp", authorizedToPickUpToJson());
+        json.put("checkInTime", checkInTime);
+        json.put("checkOutTime", checkOutTime);
+        return json;
+    }
+
+    // EFFECTS: returns caregivers in authorizedToPickUp as a JSON array
+    private JSONArray authorizedToPickUpToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Caregiver c : authorizedToPickUp) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
+    }
+
     // REQUIRES: authorizedToPickUp exists in caregiverRegistry (!null).
     // MODIFIES: this
     // EFFECTS: Adds caregiver to authorizedToPickUp list of child.
@@ -32,7 +55,11 @@ public class Child {
         this.authorizedToPickUp.add(authorizedToPickUp);
     }
 
-    public String getChildFullName() {
+    public void setPrimaryCaregiver(Caregiver primaryCaregiver) {
+        this.primaryCaregiver = primaryCaregiver;
+    }
+
+    public String getFullName() {
         return fullName;
     }
 

@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // Contains information pertaining to caregiver of child on child registry/attendance sheet
-public class Caregiver {
+public class Caregiver implements Writable {
 
     private final String fullName;
     private final Long phoneNum;
@@ -16,15 +19,24 @@ public class Caregiver {
         this.email = email;
     }
 
-    public String getCaregiverFullName() {
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("fullName", fullName);
+        json.put("phoneNum", phoneNum);
+        json.put("email", email);
+        return json;
+    }
+
+    public String getFullName() {
         return fullName;
     }
 
-    public Long getCaregiverPhoneNum() {
+    public Long getPhoneNum() {
         return phoneNum;
     }
 
-    public String getCaregiverEmail() {
+    public String getEmail() {
         return email;
     }
 

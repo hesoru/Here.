@@ -41,19 +41,19 @@ class ChildTest {
 
     @Test
     public void testConstructor() {
-        assertEquals("Jane Lovelace", c1.getChildFullName());
+        assertEquals("Jane Lovelace", c1.getFullName());
         assertEquals(cg1, c1.getPrimaryCaregiver());
         assertEquals(authorizedC1C2, c1.getAuthorizedToPickUp());
         assertEquals(null, c1.getCheckInTime());
         assertEquals(null, c1.getCheckOutTime());
 
-        assertEquals("David Lovelace", c2.getChildFullName());
+        assertEquals("David Lovelace", c2.getFullName());
         assertEquals(cg1, c2.getPrimaryCaregiver());
         assertEquals(authorizedC1C2, c2.getAuthorizedToPickUp());
         assertEquals(null, c2.getCheckInTime());
         assertEquals(null, c2.getCheckOutTime());
 
-        assertEquals("Emily Smith", c3.getChildFullName());
+        assertEquals("Emily Smith", c3.getFullName());
         assertEquals(cg2, c3.getPrimaryCaregiver());
         assertEquals(authorizedC3, c3.getAuthorizedToPickUp());
         assertEquals(null, c3.getCheckInTime());
