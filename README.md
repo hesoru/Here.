@@ -36,11 +36,3 @@ As childcare staff, I want to have the option to:
 As childcare staff, I want to be prompted and given the option to:
 - Save when quitting the application
 - Load an application state from file when starting the application
-
-**The caregiver-facing side of the app requires use of a server, so I will omit the user stories below from the project.**
-
-~~As a caregiver, I want to be able to:~~
-- ~~Select if my child(ren) will be absent on a specific day (in advance and on the day)~~
-  - ~~Select the reason for my child(ren)'s absence(s)~~
-- ~~Add a caregiver that is authorized to pick up my child(ren)~~
-- ~~Select if a non-primary caregiver will be picking up my child(ren)~~

@@ -23,6 +23,7 @@ public class AttendanceApp {
 
     private final Scanner scanner = new Scanner(System.in);
 
+    // REQUIRES: userInputChoice must be integer 1 or 2.
     // EFFECTS: Starts program if the user enters the correct password. Exits the program if the correct password is not
     //          entered. Upon starting the program, asks user if they want to load app data from file or create a new
     //          instance of AttendanceApp (with registry and attendanceSheet). If creating a new instance of
@@ -83,7 +84,8 @@ public class AttendanceApp {
             listOptions();
             switch (Integer.parseInt(scanner.nextLine())) {
                 case 0:
-                    System.exit(0);
+                    savePrompt();
+                    break;
                 case 1:
                     addNewCaregiverToRegistry();
                     break;
@@ -342,7 +344,23 @@ public class AttendanceApp {
         }
     }
 
-    // EFFECTS: saves the attendance sheet and registry to file
+    // REQUIRES: userInputChoice must be integer 1 or 2.
+    // EFFECTS: Asks the user if they want to save the attendance sheet and registry to file. If yes, saves the
+    //          attendance sheet and registry to file and quits the application. If no, quits the application.
+    private void savePrompt() {
+        System.out.println("Do you want to save your data? Type in the number of an option and press Enter:");
+        System.out.println("1. Save and quit.");
+        System.out.println("2. Don't save and quit.");
+        int userInputChoice = (Integer.parseInt(scanner.nextLine()));
+        if (userInputChoice == 1) {
+            saveState();
+            System.exit(0);
+        } else {
+            System.exit(0);
+        }
+    }
+
+    // EFFECTS: Saves the attendance sheet and registry to file.
     private void saveState() {
         try {
             jsonWriter.open();
@@ -358,7 +376,7 @@ public class AttendanceApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads attendance sheet and registry from file
+    // EFFECTS: Loads attendance sheet and registry from file.
     private void loadState() {
         try {
             this.registry = jsonReader.readRegistry();
