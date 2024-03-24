@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+// writes the attendance sheet,
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter attendanceWriter;

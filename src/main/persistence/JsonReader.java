@@ -112,7 +112,7 @@ public class JsonReader {
         addPrimaryCaregiver(child, registryPrimaryCaregiver);
         addMultipleSecondaryCaregivers(child, childJsonObject, registry);
         child.setCheckInTime(checkInTime);
-        child.setCheckInTime(checkOutTime);
+        child.setCheckOutTime(checkOutTime);
         return child;
     }
 
@@ -201,10 +201,9 @@ public class JsonReader {
     private void addChildFromRegistryToAttendanceSheet(AttendanceSheet attendanceSheet, Registry registry,
                                                        JSONObject nextChild, String list) {
         Child registryChild = parseChildFromRegistry(nextChild, registry);
-        String listToAdd = list;
-        if (listToAdd.equals("notCheckedIn")) {
+        if (list.equals("notCheckedIn")) {
             attendanceSheet.addNotCheckedIn(registryChild);
-        } else if (listToAdd.equals("checkedIn")) {
+        } else if (list.equals("checkedIn")) {
             attendanceSheet.addCheckedIn(registryChild);
         } else {
             attendanceSheet.addCheckedOut(registryChild);

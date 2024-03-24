@@ -39,9 +39,10 @@ public class AttendanceApp {
             System.out.println("1. Load attendance sheet, child registry, and caregiver registry from file.");
             System.out.println("2. Start new attendance sheet, child registry, and caregiver registry.");
             int userInputChoice = (Integer.parseInt(scanner.nextLine()));
+            this.jsonWriter = new JsonWriter(JSON_STORE_ATTENDANCE, JSON_STORE_REGISTRY);
+            this.jsonReader = new JsonReader(JSON_STORE_ATTENDANCE, JSON_STORE_REGISTRY);
             if (userInputChoice == 1) {
                 loadState();
-                selectOption();
             } else {
                 System.out.println("Type in new registry name and press Enter:");
                 String registryName = scanner.nextLine();
@@ -49,9 +50,8 @@ public class AttendanceApp {
                 String attendanceSheetName = scanner.nextLine();
                 this.registry = new Registry(registryName);
                 this.attendanceSheet = new AttendanceSheet(attendanceSheetName);
-                this.jsonWriter = new JsonWriter(JSON_STORE_ATTENDANCE, JSON_STORE_REGISTRY);
-                this.jsonReader = new JsonReader(JSON_STORE_ATTENDANCE, JSON_STORE_REGISTRY);
             }
+            selectOption();
         }
     }
 

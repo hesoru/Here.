@@ -1,0 +1,59 @@
+{
+    "name": "CPSC 210",
+    "childRegistry": [
+        {
+            "primaryCaregiver": {
+                "fullName": "Ada Lovelace",
+                "phoneNum": 7788221234,
+                "email": "alovelace@gmail.com"
+            },
+            "authorizedToPickUp": [{
+                "fullName": "Ada Lovelace",
+                "phoneNum": 7788221234,
+                "email": "alovelace@gmail.com"
+            }],
+            "fullName": "David Lovelace"
+        },
+        {
+            "primaryCaregiver": {
+                "fullName": "Ada Lovelace",
+                "phoneNum": 7788221234,
+                "email": "alovelace@gmail.com"
+            },
+            "authorizedToPickUp": [{
+                "fullName": "Ada Lovelace",
+                "phoneNum": 7788221234,
+                "email": "alovelace@gmail.com"
+            }],
+            "checkInTime": "16:56:10.640420600",
+            "fullName": "Jane Lovelace"
+        },
+        {
+            "primaryCaregiver": {
+                "fullName": "John Smith",
+                "phoneNum": 6043331234,
+                "email": "jsmith@yahoo.com"
+            },
+            "checkOutTime": "16:56:10.640420600",
+            "authorizedToPickUp": [{
+                "fullName": "John Smith",
+                "phoneNum": 6043331234,
+                "email": "jsmith@yahoo.com"
+            }],
+            "checkInTime": "16:56:10.640420600",
+            "fullName": "Emily Smith"
+        }
+    ],
+    "caregiverRegistry": [
+        {
+            "fullName": "Ada Lovelace",
+            "phoneNum": 7788221234,
+            "email": "alovelace@gmail.com"
+        },
+        {
+            "fullName": "John Smith",
+            "phoneNum": 6043331234,
+            "email": "jsmith@yahoo.com"
+        }
+    ]
+}
