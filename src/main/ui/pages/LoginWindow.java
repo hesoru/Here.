@@ -9,7 +9,7 @@ import java.awt.*;
 public class LoginWindow extends Window {
 
     public static final int WIDTH = 400;
-    public static final int HEIGHT = 200;
+    public static final int HEIGHT = 150;
     public static final String PASSWORD = "demo";
 
     private JPanel panel0;
@@ -20,14 +20,7 @@ public class LoginWindow extends Window {
 
     public LoginWindow(AttendanceUI controller) {
         super("Login", controller);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
         setSize(WIDTH, HEIGHT);
-        setVisible(true);
-        getContentPane().setBackground(new Color(220, 240, 255));
-        setLayout(null);
-        ImageIcon icon = new ImageIcon("src\\App_Icon.png");
-        setIconImage(icon.getImage());
 
         panel0 = new JPanel();
         panel0.setBackground(new Color(220, 240, 255));

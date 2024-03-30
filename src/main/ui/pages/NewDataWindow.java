@@ -9,7 +9,7 @@ import java.awt.*;
 public class NewDataWindow extends Window {
 
     public static final int WIDTH = 400;
-    public static final int HEIGHT = 125;
+    public static final int HEIGHT = 200;
 
     private JPanel panel0;
     private GridBagConstraints grid;
@@ -19,13 +19,7 @@ public class NewDataWindow extends Window {
 
     public NewDataWindow(AttendanceUI controller) {
         super("Enter New Data", controller);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
         setSize(WIDTH, HEIGHT);
-        setVisible(true);
-        getContentPane().setBackground(new Color(220, 240, 255));
-        ImageIcon icon = new ImageIcon("src\\App_Icon.png");
-        setIconImage(icon.getImage());
 
         panel0 = new JPanel();
         panel0.setBackground(new Color(220, 240, 255));
@@ -72,7 +66,9 @@ public class NewDataWindow extends Window {
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
         buttonRow.add(b1);
+        grid.gridx = 1;
         grid.gridy = 2;
+        panel0.add(b1, grid);
 
         b1.addActionListener(e -> {
             String registryName = registryField.getText();
@@ -82,7 +78,5 @@ public class NewDataWindow extends Window {
             new HomeWindow(super.getController());
             this.dispose();
         });
-
-        panel0.add(b1);
     }
 }

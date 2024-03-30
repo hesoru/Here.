@@ -14,14 +14,7 @@ public class RegistryWindow extends Window {
 
     public RegistryWindow(AttendanceUI controller) {
         super("Registry", controller);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
         setSize(WIDTH, HEIGHT);
-        setVisible(true);
-        getContentPane().setBackground(new Color(220, 240, 255));
-        setLayout(new GridLayout(3, 1));
-        ImageIcon icon = new ImageIcon("src\\App_Icon.png");
-        setIconImage(icon.getImage());
 
         sidebar = new JTabbedPane();
         sidebar.setTabPlacement(JTabbedPane.LEFT);

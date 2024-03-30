@@ -11,10 +11,9 @@ import java.awt.*;
 
 public class AttendanceSheetTab extends Tab {
 
-    JPanel panel0;
-    GridBagConstraints grid1;
+    GridBagConstraints grid0;
     JPanel panel1;
-    GridBagConstraints grid2;
+    GridBagConstraints grid1;
     JFrame authorizedCaregiverWindow;
 
     DefaultTableModel notYetCheckedInSheetModel;
@@ -37,11 +36,8 @@ public class AttendanceSheetTab extends Tab {
     public AttendanceSheetTab(AttendanceUI controller, String sheetType) {
         super(controller);
 
-        panel0 = new JPanel();
-        panel0.setBackground(new Color(220, 240, 255));
-        panel0.setLayout(new GridBagLayout());
-        grid1 = new GridBagConstraints();
-        grid1.fill = GridBagConstraints.HORIZONTAL;
+        grid0 = new GridBagConstraints();
+        grid0.fill = GridBagConstraints.HORIZONTAL;
 
         if (sheetType.equals("NotYetCheckedIn")) {
             placeNotYetCheckedInSheet();
@@ -57,8 +53,6 @@ public class AttendanceSheetTab extends Tab {
         if (sheetType.equals("Settings")) {
             placeSettingsButtons();
         }
-
-        add(panel0);
     }
 
     public void placeNotYetCheckedInSheet() {
@@ -79,12 +73,12 @@ public class AttendanceSheetTab extends Tab {
         notYetCheckedInSheet = new JTable(notYetCheckedInSheetModel);
 
         JScrollPane scrollPane = new JScrollPane(notYetCheckedInSheet);
-        grid1.gridx = 0;
-        grid1.gridwidth = 5;
-        grid1.gridy = 0;
-        grid1.gridheight = 4;
+        grid0.gridx = 0;
+        grid0.gridwidth = 5;
+        grid0.gridy = 0;
+        grid0.gridheight = 4;
         notYetCheckedInSheet.setFillsViewportHeight(true);
-        panel0.add(scrollPane, grid1);
+        add(scrollPane, grid0);
     }
 
     public void placeNotYetCheckedInButtons() {
@@ -93,8 +87,9 @@ public class AttendanceSheetTab extends Tab {
         JPanel buttonRow = formatButtonRow(b1);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid1.gridx = 2;
-        grid1.gridy = 4;
+        grid0.gridx = 2;
+        grid0.gridy = 4;
+        add(buttonRow, grid0);
 
         b1.addActionListener(e -> {
             int selected = notYetCheckedInSheet.getSelectedRow();
@@ -114,8 +109,6 @@ public class AttendanceSheetTab extends Tab {
                         + childToCheckIn.getCheckInTime());
             }
         });
-
-        panel0.add(buttonRow, grid1);
     }
 
     // REQUIRES: childFullName is first and last name separated by a space (case-sensitive).
@@ -146,12 +139,12 @@ public class AttendanceSheetTab extends Tab {
         checkedInSheet = new JTable(checkedInSheetModel);
 
         JScrollPane scrollPane = new JScrollPane(checkedInSheet);
-        grid1.gridx = 0;
-        grid1.gridwidth = 5;
-        grid1.gridy = 0;
-        grid1.gridheight = 4;
+        grid0.gridx = 0;
+        grid0.gridwidth = 5;
+        grid0.gridy = 0;
+        grid0.gridheight = 4;
         checkedInSheet.setFillsViewportHeight(true);
-        panel0.add(scrollPane, grid1);
+        add(scrollPane, grid0);
     }
 
     public void placeCheckedInButtons() {
@@ -160,8 +153,9 @@ public class AttendanceSheetTab extends Tab {
         JPanel buttonRow = formatButtonRow(b1);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid1.gridx = 2;
-        grid1.gridy = 4;
+        grid0.gridx = 2;
+        grid0.gridy = 4;
+        add(buttonRow, grid0);
 
         b1.addActionListener(e -> {
             int selected = checkedInSheet.getSelectedRow();
@@ -169,7 +163,6 @@ public class AttendanceSheetTab extends Tab {
             if (selected != -1) {
                 childToCheckOutName = authorizedCaregiverSheetModel.getValueAt(selected, 0).toString();
                 authorizedCaregiverWindow(childToCheckOut);
-
             }
 
             Object[] rowData = new Object[2];
@@ -180,15 +173,13 @@ public class AttendanceSheetTab extends Tab {
                 childToCheckOutName = authorizedCaregiverSheetModel.getValueAt(selected, 0).toString();
                 checkOutChild();
                 checkedOutSheetModel.addRow(rowData);
-                authorizedCaregiverSheetModel.removeRow(selected);
-                authorizedCaregiverSheetModel.fireTableDataChanged();
+                checkedInSheetModel.removeRow(selected);
+                checkedInSheetModel.fireTableDataChanged();
                 checkedOutSheetModel.fireTableDataChanged();
                 JOptionPane.showMessageDialog(null, childToCheckOutName + " checked out at "
-                        + childToCheckOut.getCheckOutTime());
+                        + childToCheckOut.getCheckOutTime() + " by " + caregiverToCheckOutName);
             }
         });
-
-        panel0.add(buttonRow, grid1);
     }
 
     public void authorizedCaregiverWindow(Child child) {
@@ -196,11 +187,13 @@ public class AttendanceSheetTab extends Tab {
         panel1 = new JPanel();
         panel1.setBackground(new Color(220, 240, 255));
         panel1.setLayout(new GridBagLayout());
-        grid2 = new GridBagConstraints();
-        grid2.fill = GridBagConstraints.HORIZONTAL;
+        grid1 = new GridBagConstraints();
+        grid1.fill = GridBagConstraints.HORIZONTAL;
 
         placeAuthorizedCaregiverSheet(child);
         placeAuthorizedCaregiverButtons(child);
+
+        authorizedCaregiverWindow.add(panel1);
     }
 
     public void placeAuthorizedCaregiverSheet(Child child) {
@@ -220,12 +213,12 @@ public class AttendanceSheetTab extends Tab {
         authorizedCaregiverSheet = new JTable(authorizedCaregiverSheetModel);
 
         JScrollPane scrollPane = new JScrollPane(authorizedCaregiverSheet);
-        grid2.gridx = 0;
-        grid2.gridwidth = 5;
-        grid2.gridy = 0;
-        grid2.gridheight = 4;
+        grid1.gridx = 0;
+        grid1.gridwidth = 5;
+        grid1.gridy = 0;
+        grid1.gridheight = 4;
         authorizedCaregiverSheet.setFillsViewportHeight(true);
-        panel1.add(scrollPane, grid2);
+        panel1.add(scrollPane, grid1);
     }
 
     public void placeAuthorizedCaregiverButtons(Child child) {
@@ -234,8 +227,8 @@ public class AttendanceSheetTab extends Tab {
         JPanel buttonRow = formatButtonRow(b1);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid2.gridx = 2;
-        grid2.gridy = 4;
+        grid1.gridx = 2;
+        grid1.gridy = 4;
 
         b1.addActionListener(e -> {
             int selected = authorizedCaregiverSheet.getSelectedRow();
@@ -257,7 +250,7 @@ public class AttendanceSheetTab extends Tab {
             }
         });
 
-        panel1.add(buttonRow, grid2);
+        panel1.add(buttonRow, grid1);
     }
 
     // REQUIRES: childToCheckOut exists in child registry (!null).
@@ -295,12 +288,12 @@ public class AttendanceSheetTab extends Tab {
         checkedOutSheet = new JTable(checkedOutSheetModel);
 
         JScrollPane scrollPane = new JScrollPane(checkedOutSheet);
-        grid1.gridx = 0;
-        grid1.gridwidth = 5;
-        grid1.gridy = 0;
-        grid1.gridheight = 4;
+        grid0.gridx = 0;
+        grid0.gridwidth = 5;
+        grid0.gridy = 0;
+        grid0.gridheight = 4;
         checkedOutSheet.setFillsViewportHeight(true);
-        panel0.add(scrollPane, grid1);
+        panel0.add(scrollPane, grid0);
     }
 
     public void placeSettingsButtons() {
@@ -311,7 +304,7 @@ public class AttendanceSheetTab extends Tab {
         buttonRow.add(b2);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid2.gridy = 4;
+        grid1.gridy = 4;
 
         b1.addActionListener(e -> {
             super.getController().resetAttendance();
@@ -322,6 +315,6 @@ public class AttendanceSheetTab extends Tab {
         b2.addActionListener(e -> {
             super.getController().saveState();
         });
-        panel0.add(buttonRow, grid2);
+        panel0.add(buttonRow, grid1);
     }
 }
