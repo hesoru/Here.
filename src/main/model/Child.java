@@ -15,6 +15,7 @@ public class Child implements Writable {
     private final List<Caregiver> authorizedToPickUp;
     private LocalTime checkInTime;
     private LocalTime checkOutTime;
+    private Caregiver checkOutCaregiver;
 
     // REQUIRES: fullName is first and last name separated by a space, primaryCaregiver exists.
     // EFFECTS: Creates a child with a full name, primary caregiver, and list of caregivers
@@ -26,6 +27,7 @@ public class Child implements Writable {
         this.authorizedToPickUp.add(primaryCaregiver);
         this.checkInTime = null;
         this.checkOutTime = null;
+        this.checkOutCaregiver = null;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class Child implements Writable {
         json.put("authorizedToPickUp", authorizedToPickUpToJson());
         json.put("checkInTime", checkInTime);
         json.put("checkOutTime", checkOutTime);
+        json.put("checkOutCaregiver", checkOutTime);
         return json;
     }
 
@@ -77,6 +80,10 @@ public class Child implements Writable {
 
     public LocalTime getCheckOutTime() {
         return checkOutTime;
+    }
+
+    public Caregiver getCheckOutCaregiver() {
+        return checkOutCaregiver;
     }
 
     public void setCheckInTime(LocalTime checkInTime) {

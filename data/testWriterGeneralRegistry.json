@@ -25,7 +25,7 @@
                 "phoneNum": 7788221234,
                 "email": "alovelace@gmail.com"
             }],
-            "checkInTime": "16:56:10.640420600",
+            "checkInTime": "22:53:35.402154600",
             "fullName": "Jane Lovelace"
         },
         {
@@ -34,13 +34,13 @@
                 "phoneNum": 6043331234,
                 "email": "jsmith@yahoo.com"
             },
-            "checkOutTime": "16:56:10.640420600",
+            "checkOutTime": "22:53:35.402154600",
             "authorizedToPickUp": [{
                 "fullName": "John Smith",
                 "phoneNum": 6043331234,
                 "email": "jsmith@yahoo.com"
             }],
-            "checkInTime": "16:56:10.640420600",
+            "checkInTime": "22:53:35.402154600",
             "fullName": "Emily Smith"
         }
     ],

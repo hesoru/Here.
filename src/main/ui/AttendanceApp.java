@@ -48,11 +48,19 @@ public class AttendanceApp {
                 String registryName = scanner.nextLine();
                 System.out.println("Type in new attendance sheet name and press Enter:");
                 String attendanceSheetName = scanner.nextLine();
-                this.registry = new Registry(registryName);
-                this.attendanceSheet = new AttendanceSheet(attendanceSheetName);
+                createRegistry(registryName);
+                createAttendanceSheet(attendanceSheetName);
             }
             selectOption();
         }
+    }
+
+    public void createRegistry(String name) {
+        this.registry = new Registry(name);
+    }
+
+    public void createAttendanceSheet(String name) {
+        this.attendanceSheet = new AttendanceSheet(name);
     }
 
     // EFFECTS: Lists options for attendance application.
