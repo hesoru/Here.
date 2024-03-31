@@ -9,6 +9,9 @@ public class AttendanceSheetWindow extends Window {
 
     private JTabbedPane sidebar;
 
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 500;
+
     public static final int NOT_YET_CHECKED_IN_TAB_INDEX = 0;
     public static final int CHECKED_IN_TAB_INDEX = 1;
     public static final int CHECKED_OUT_TAB_INDEX = 2;

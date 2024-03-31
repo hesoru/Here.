@@ -11,8 +11,13 @@ import java.awt.*;
 
 public class RegistryTab extends Tab {
 
-    JPanel panel0;
-    GridBagConstraints grid;
+    GridBagConstraints grid0;
+
+    JPanel panel1;
+    JPanel panel2;
+
+    GridBagConstraints grid1;
+    GridBagConstraints grid2;
 
     DefaultTableModel childRegistrySheetModel;
     DefaultTableModel caregiverRegistrySheetModel;
@@ -39,11 +44,8 @@ public class RegistryTab extends Tab {
     public RegistryTab(AttendanceUI controller, String registryType) {
         super(controller);
 
-        panel0 = new JPanel();
-        panel0.setBackground(new Color(220, 240, 255));
-        panel0.setLayout(new GridBagLayout());
-        grid = new GridBagConstraints();
-        grid.fill = GridBagConstraints.HORIZONTAL;
+        grid0 = new GridBagConstraints();
+        grid0.fill = GridBagConstraints.HORIZONTAL;
 
         if (registryType.equals("ChildRegistry")) {
             placeChildRegistrySheet();
@@ -53,8 +55,6 @@ public class RegistryTab extends Tab {
             placeCaregiverRegistrySheet();
             placeCaregiverRegistryButtons();
         }
-
-        add(panel0);
     }
 
     public void placeChildRegistrySheet() {
@@ -75,12 +75,12 @@ public class RegistryTab extends Tab {
         childRegistrySheet = new JTable(childRegistrySheetModel);
 
         JScrollPane scrollPane = new JScrollPane(childRegistrySheet);
-        grid.gridx = 0;
-        grid.gridwidth = 5;
-        grid.gridy = 0;
-        grid.gridheight = 4;
-        childRegistrySheet.setFillsViewportHeight(true);
-        panel0.add(scrollPane, grid);
+        grid0.gridx = 0;
+        grid0.gridwidth = 5;
+        grid0.gridy = 0;
+        grid0.gridheight = 4;
+//        childRegistrySheet.setFillsViewportHeight(true);
+        add(scrollPane, grid0);
     }
 
     public void placeChildRegistryButtons() {
@@ -91,7 +91,9 @@ public class RegistryTab extends Tab {
         buttonRow.add(b2);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid.gridy = 4;
+        grid0.gridx = 0;
+        grid0.gridy = 4;
+        add(buttonRow, grid0);
 
         b1.addActionListener(e -> {
             addWindow("childRegistrySheetModel");
@@ -109,8 +111,6 @@ public class RegistryTab extends Tab {
                 JOptionPane.showMessageDialog(null, childToRemoveName + " removed successfully.");
             }
         });
-
-        panel0.add(buttonRow, grid);
     }
 
     public void addWindow(String tableModelName) {
@@ -123,11 +123,11 @@ public class RegistryTab extends Tab {
         ImageIcon icon = new ImageIcon("src\\App_Icon.png");
         addWindow.setIconImage(icon.getImage());
 
-        panel0 = new JPanel();
-        panel0.setBackground(new Color(220, 240, 255));
-        panel0.setLayout(new GridBagLayout());
-        grid = new GridBagConstraints();
-        grid.fill = GridBagConstraints.HORIZONTAL;
+        panel1 = new JPanel();
+        panel1.setBackground(new Color(220, 240, 255));
+        panel1.setLayout(new GridBagLayout());
+        grid1 = new GridBagConstraints();
+        grid1.fill = GridBagConstraints.HORIZONTAL;
 
         if (tableModelName.equals("childRegistrySheetModel")) {
             placeAddChildWindowFields();
@@ -138,7 +138,7 @@ public class RegistryTab extends Tab {
             placeAddCaregiverWindowButtons();
         }
 
-        addWindow.add(panel0);
+        addWindow.add(panel1);
     }
 
     public void placeAddChildWindowFields() {
@@ -147,15 +147,15 @@ public class RegistryTab extends Tab {
 
         JLabel label1 = new JLabel();
         label1.setText("New child's full name (First Last):");
-        grid.gridx = 0;
-        grid.gridy = 1;
-        panel0.add(label1, grid);
+        grid1.gridx = 0;
+        grid1.gridy = 1;
+        panel1.add(label1, grid1);
 
         childNameField = new JTextField(20);
-        grid.gridx = 1;
-        grid.gridwidth = 2;
-        grid.gridy = 1;
-        panel0.add(childNameField, grid);
+        grid1.gridx = 1;
+        grid1.gridwidth = 2;
+        grid1.gridy = 1;
+        panel1.add(childNameField, grid1);
     }
 
     public void placeAddCaregiverWindowFields() {
@@ -164,51 +164,52 @@ public class RegistryTab extends Tab {
 
         JLabel label1 = new JLabel();
         label1.setText("New caregiver's full name (First Last):");
-        grid.gridx = 0;
-        grid.gridy = 1;
-        panel0.add(label1, grid);
+        grid1.gridx = 0;
+        grid1.gridy = 1;
+        panel1.add(label1, grid1);
 
         JLabel label2 = new JLabel();
         label2.setText("New caregiver's phone number (XXXXXXXXXX):");
-        grid.gridx = 0;
-        grid.gridy = 2;
-        panel0.add(label2, grid);
+        grid1.gridx = 0;
+        grid1.gridy = 2;
+        panel1.add(label2, grid1);
 
         JLabel label3 = new JLabel();
         label3.setText("New caregiver's email (____@___.___):");
-        grid.gridx = 0;
-        grid.gridy = 3;
-        panel0.add(label3, grid);
+        grid1.gridx = 0;
+        grid1.gridy = 3;
+        panel1.add(label3, grid1);
 
         caregiverNameField = new JTextField(20);
-        grid.gridx = 1;
-        grid.gridwidth = 2;
-        grid.gridy = 1;
-        panel0.add(caregiverNameField, grid);
+        grid1.gridx = 1;
+        grid1.gridwidth = 2;
+        grid1.gridy = 1;
+        panel1.add(caregiverNameField, grid1);
 
         caregiverPhoneField = new JTextField(20);
-        grid.gridx = 1;
-        grid.gridwidth = 2;
-        grid.gridy = 2;
-        panel0.add(caregiverPhoneField, grid);
+        grid1.gridx = 1;
+        grid1.gridwidth = 2;
+        grid1.gridy = 2;
+        panel1.add(caregiverPhoneField, grid1);
 
         caregiverEmailField = new JTextField(20);
-        grid.gridx = 1;
-        grid.gridwidth = 2;
-        grid.gridy = 3;
-        panel0.add(caregiverEmailField, grid);
+        grid1.gridx = 1;
+        grid1.gridwidth = 2;
+        grid1.gridy = 3;
+        panel1.add(caregiverEmailField, grid1);
     }
 
     public void placeAddChildWindowButtons() {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 
         JPanel buttonRow = new JPanel();
+        buttonRow.add(b1);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        buttonRow.add(b1);
 
-        grid.gridy = 2;
-        panel0.add(buttonRow, grid);
+        grid1.gridx = 0;
+        grid1.gridy = 2;
+        panel1.add(buttonRow, grid1);
 
         b1.addActionListener(e -> {
             String childName = childNameField.getText();
@@ -231,16 +232,16 @@ public class RegistryTab extends Tab {
         ImageIcon icon = new ImageIcon("src\\App_Icon.png");
         selectCaregiverWindow.setIconImage(icon.getImage());
 
-        panel0 = new JPanel();
-        panel0.setBackground(new Color(220, 240, 255));
-        panel0.setLayout(new GridBagLayout());
-        grid = new GridBagConstraints();
-        grid.fill = GridBagConstraints.HORIZONTAL;
+        panel2 = new JPanel();
+        panel2.setBackground(new Color(220, 240, 255));
+        panel2.setLayout(new GridBagLayout());
+        grid2 = new GridBagConstraints();
+        grid2.fill = GridBagConstraints.HORIZONTAL;
 
         placeCaregiverRegistrySheet();
         placeSelectCaregiverWindowButtons();
 
-        selectCaregiverWindow.add(panel0);
+        selectCaregiverWindow.add(panel2);
     }
 
     public void placeSelectCaregiverWindowButtons() {
@@ -251,7 +252,9 @@ public class RegistryTab extends Tab {
         buttonRow.add(b2);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid.gridy = 4;
+        grid2.gridx = 0;
+        grid2.gridy = 4;
+        panel2.add(buttonRow, grid2);
 
         b1.addActionListener(e -> {
             addWindow("caregiverRegistrySheetModel");
@@ -266,7 +269,6 @@ public class RegistryTab extends Tab {
                 primaryCaregiverName = caregiverRegistrySheetModel.getValueAt(selected, 0).toString();
             }
         });
-        panel0.add(buttonRow, grid);
     }
 
     public void placeAddCaregiverWindowButtons() {
@@ -277,8 +279,9 @@ public class RegistryTab extends Tab {
         buttonRow.setLayout(new FlowLayout());
         buttonRow.add(b1);
 
-        grid.gridy = 4;
-        panel0.add(buttonRow, grid);
+        grid1.gridx = 0;
+        grid1.gridy = 4;
+        panel1.add(buttonRow, grid1);
 
         b1.addActionListener(e -> {
             String caregiverName = caregiverNameField.getText();
@@ -314,12 +317,12 @@ public class RegistryTab extends Tab {
         caregiverRegistrySheet = new JTable(caregiverRegistrySheetModel);
 
         JScrollPane scrollPane = new JScrollPane(caregiverRegistrySheet);
-        grid.gridx = 0;
-        grid.gridwidth = 5;
-        grid.gridy = 0;
-        grid.gridheight = 4;
+        grid0.gridx = 0;
+        grid0.gridwidth = 5;
+        grid0.gridy = 0;
+        grid0.gridheight = 4;
         caregiverRegistrySheet.setFillsViewportHeight(true);
-        panel0.add(scrollPane, grid);
+        add(scrollPane, grid0);
     }
 
     public void placeCaregiverRegistryButtons() {
@@ -330,7 +333,9 @@ public class RegistryTab extends Tab {
         buttonRow.add(b2);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid.gridy = 4;
+        grid0.gridx = 0;
+        grid0.gridy = 4;
+        add(buttonRow, grid0);
 
         b1.addActionListener(e -> {
             addWindow("caregiverRegistrySheetModel");
@@ -349,8 +354,6 @@ public class RegistryTab extends Tab {
                 JOptionPane.showMessageDialog(null, primaryCaregiverName + " removed successfully.");
             }
         });
-
-        panel0.add(buttonRow, grid);
     }
 
 

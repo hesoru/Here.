@@ -9,6 +9,9 @@ public class RegistryWindow extends Window {
 
     private JTabbedPane sidebar;
 
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 500;
+
     public static final int CHILD_REGISTRY_TAB_INDEX = 0;
     public static final int CAREGIVER_REGISTRY_TAB_INDEX = 1;
 
@@ -18,6 +21,7 @@ public class RegistryWindow extends Window {
 
         sidebar = new JTabbedPane();
         sidebar.setTabPlacement(JTabbedPane.LEFT);
+
         loadTabs();
         add(sidebar);
         setVisible(true);

@@ -7,6 +7,7 @@ import model.Registry;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.pages.LoginWindow;
+import ui.pages.RegistryWindow;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
