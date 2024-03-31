@@ -57,6 +57,10 @@ public class HomeWindow extends Window {
             new RegistryWindow(super.getController());
         });
 
+        b3.addActionListener(e -> {
+            super.getController().saveState();
+        });
+
         add(buttonRow1);
         add(buttonRow2);
     }

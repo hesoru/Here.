@@ -229,6 +229,7 @@ public class AttendanceSheetTab extends Tab {
         buttonRow.setLayout(new FlowLayout());
         grid1.gridx = 2;
         grid1.gridy = 4;
+        panel1.add(buttonRow, grid1);
 
         b1.addActionListener(e -> {
             int selected = authorizedCaregiverSheet.getSelectedRow();
@@ -249,8 +250,6 @@ public class AttendanceSheetTab extends Tab {
                         + childToCheckOut.getCheckOutTime() + " by " + caregiverToCheckOutName);
             }
         });
-
-        panel1.add(buttonRow, grid1);
     }
 
     // REQUIRES: childToCheckOut exists in child registry (!null).
@@ -293,18 +292,17 @@ public class AttendanceSheetTab extends Tab {
         grid0.gridy = 0;
         grid0.gridheight = 4;
         checkedOutSheet.setFillsViewportHeight(true);
-        panel0.add(scrollPane, grid0);
+        add(scrollPane, grid0);
     }
 
     public void placeSettingsButtons() {
         JButton b1 = new JButton(ButtonNames.RESET.getValue());
-        JButton b2 = new JButton(ButtonNames.SAVE.getValue());
 
         JPanel buttonRow = formatButtonRow(b1);
-        buttonRow.add(b2);
         buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
         grid1.gridy = 4;
+        add(buttonRow, grid1);
 
         b1.addActionListener(e -> {
             super.getController().resetAttendance();
@@ -312,9 +310,5 @@ public class AttendanceSheetTab extends Tab {
             checkedInSheetModel.fireTableDataChanged();
             checkedOutSheetModel.fireTableDataChanged();
         });
-        b2.addActionListener(e -> {
-            super.getController().saveState();
-        });
-        panel0.add(buttonRow, grid1);
     }
 }
