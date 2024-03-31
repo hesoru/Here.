@@ -9,7 +9,7 @@ public class AttendanceSheetWindow extends Window {
 
     private JTabbedPane sidebar;
 
-    public static final int WIDTH = 500;
+    public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
 
     public static final int NOT_YET_CHECKED_IN_TAB_INDEX = 0;
@@ -19,6 +19,7 @@ public class AttendanceSheetWindow extends Window {
 
     public AttendanceSheetWindow(AttendanceUI controller) {
         super("Attendance Sheet", controller);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
 
         sidebar = new JTabbedPane();

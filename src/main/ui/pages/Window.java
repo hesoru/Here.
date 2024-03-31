@@ -11,10 +11,8 @@ public class Window extends JFrame {
 
     public Window(String name, AttendanceUI controller) {
         super(name);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-        getContentPane().setBackground(new Color(220, 240, 255));
         ImageIcon icon = new ImageIcon("src\\App_Icon.png");
         setIconImage(icon.getImage());
 

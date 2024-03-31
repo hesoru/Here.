@@ -18,11 +18,11 @@ public class NewDataWindow extends Window {
     JTextField attendanceSheetField;
 
     public NewDataWindow(AttendanceUI controller) {
-        super("Enter New Data", controller);
+        super("Name Registry and Attendance Sheet", controller);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
 
         panel0 = new JPanel();
-        panel0.setBackground(new Color(220, 240, 255));
         panel0.setLayout(new GridBagLayout());
         grid = new GridBagConstraints();
         grid.fill = GridBagConstraints.HORIZONTAL;
@@ -63,7 +63,6 @@ public class NewDataWindow extends Window {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 
         JPanel buttonRow = new JPanel();
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
         buttonRow.add(b1);
         grid.gridx = 1;

@@ -16,6 +16,7 @@ public class ChooseDataWindow extends Window {
 
     public ChooseDataWindow(AttendanceUI controller) {
         super("Load Data", controller);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setVisible(true);
 
@@ -37,7 +38,6 @@ public class ChooseDataWindow extends Window {
         JButton b2 = new JButton(ButtonNames.NEW.getValue());
 
         JPanel buttonRow = new JPanel();
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
         buttonRow.add(b1);
         buttonRow.add(b2);

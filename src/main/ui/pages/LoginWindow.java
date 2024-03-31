@@ -8,25 +8,25 @@ import java.awt.*;
 
 public class LoginWindow extends Window {
 
-    public static final int WIDTH = 400;
+    public static final int WIDTH = 300;
     public static final int HEIGHT = 150;
     public static final String PASSWORD = "demo";
 
     private JPanel panel0;
-    private GridBagConstraints grid;
+    private GridBagConstraints grid0;
 
     private JLabel label;
     private JTextField passwordField;
 
     public LoginWindow(AttendanceUI controller) {
         super("Login", controller);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
 
         panel0 = new JPanel();
-        panel0.setBackground(new Color(220, 240, 255));
         panel0.setLayout(new GridBagLayout());
-        grid = new GridBagConstraints();
-        grid.fill = GridBagConstraints.HORIZONTAL;
+        grid0 = new GridBagConstraints();
+        grid0.fill = GridBagConstraints.HORIZONTAL;
 
         placeField();
         placeButton();
@@ -35,33 +35,30 @@ public class LoginWindow extends Window {
     }
 
     public void placeField() {
+        JPanel fieldRow = new JPanel();
+        fieldRow.setLayout(new FlowLayout());
+        fieldRow.setSize(WIDTH, HEIGHT / 2);
+
         label = new JLabel();
         label.setText("Password");
+        label.setHorizontalAlignment(JLabel.CENTER);
 
         passwordField = new JPasswordField(20);
 
-        JPanel fieldRow = new JPanel();
-        fieldRow.setBackground(new Color(220, 240, 255));
-        fieldRow.setLayout(new FlowLayout());
-        fieldRow.setSize(WIDTH, HEIGHT / 3);
         fieldRow.add(label);
         fieldRow.add(passwordField);
-        grid.gridx = 0;
-        grid.gridy = 0;
-        panel0.add(fieldRow, grid);
+        panel0.add(fieldRow);
     }
 
     public void placeButton() {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 
         JPanel buttonRow = new JPanel();
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        buttonRow.setSize(WIDTH, HEIGHT / 3);
+        buttonRow.setSize(WIDTH, HEIGHT / 2);
         buttonRow.add(b1);
-        grid.gridx = 0;
-        grid.gridy = 1;
-        panel0.add(buttonRow, grid);
+        grid0.gridy = 1;
+        panel0.add(buttonRow, grid0);
 
         b1.addActionListener(e -> {
             String passInput = passwordField.getText();

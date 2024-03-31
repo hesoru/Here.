@@ -9,7 +9,7 @@ public class RegistryWindow extends Window {
 
     private JTabbedPane sidebar;
 
-    public static final int WIDTH = 500;
+    public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
 
     public static final int CHILD_REGISTRY_TAB_INDEX = 0;
@@ -17,6 +17,7 @@ public class RegistryWindow extends Window {
 
     public RegistryWindow(AttendanceUI controller) {
         super("Registry", controller);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
 
         sidebar = new JTabbedPane();

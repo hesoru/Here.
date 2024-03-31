@@ -85,7 +85,6 @@ public class AttendanceSheetTab extends Tab {
         JButton b1 = new JButton(ButtonNames.CHECK_IN.getValue());
 
         JPanel buttonRow = formatButtonRow(b1);
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
         grid0.gridx = 2;
         grid0.gridy = 4;
@@ -151,7 +150,6 @@ public class AttendanceSheetTab extends Tab {
         JButton b1 = new JButton(ButtonNames.CHECK_OUT.getValue());
 
         JPanel buttonRow = formatButtonRow(b1);
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
         grid0.gridx = 2;
         grid0.gridy = 4;
@@ -184,8 +182,8 @@ public class AttendanceSheetTab extends Tab {
 
     public void authorizedCaregiverWindow(Child child) {
         authorizedCaregiverWindow = new JFrame();
+        authorizedCaregiverWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         panel1 = new JPanel();
-        panel1.setBackground(new Color(220, 240, 255));
         panel1.setLayout(new GridBagLayout());
         grid1 = new GridBagConstraints();
         grid1.fill = GridBagConstraints.HORIZONTAL;
@@ -225,7 +223,6 @@ public class AttendanceSheetTab extends Tab {
         JButton b1 = new JButton(ButtonNames.SELECT_PICKUP.getValue());
 
         JPanel buttonRow = formatButtonRow(b1);
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
         grid1.gridx = 2;
         grid1.gridy = 4;
@@ -248,6 +245,7 @@ public class AttendanceSheetTab extends Tab {
                 checkedOutSheetModel.fireTableDataChanged();
                 JOptionPane.showMessageDialog(null, childToCheckOutName + " checked out at "
                         + childToCheckOut.getCheckOutTime() + " by " + caregiverToCheckOutName);
+                authorizedCaregiverWindow.dispose();
             }
         });
     }
@@ -299,10 +297,9 @@ public class AttendanceSheetTab extends Tab {
         JButton b1 = new JButton(ButtonNames.RESET.getValue());
 
         JPanel buttonRow = formatButtonRow(b1);
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid1.gridy = 4;
-        add(buttonRow, grid1);
+        grid0.gridy = 4;
+        add(buttonRow, grid0);
 
         b1.addActionListener(e -> {
             super.getController().resetAttendance();

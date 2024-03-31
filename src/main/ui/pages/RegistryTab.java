@@ -75,11 +75,8 @@ public class RegistryTab extends Tab {
         childRegistrySheet = new JTable(childRegistrySheetModel);
 
         JScrollPane scrollPane = new JScrollPane(childRegistrySheet);
-        grid0.gridx = 0;
-        grid0.gridwidth = 5;
         grid0.gridy = 0;
-        grid0.gridheight = 4;
-//        childRegistrySheet.setFillsViewportHeight(true);
+        childRegistrySheet.setFillsViewportHeight(true);
         add(scrollPane, grid0);
     }
 
@@ -89,10 +86,8 @@ public class RegistryTab extends Tab {
 
         JPanel buttonRow = formatButtonRow(b1);
         buttonRow.add(b2);
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid0.gridx = 0;
-        grid0.gridy = 4;
+        grid0.gridy = 1;
         add(buttonRow, grid0);
 
         b1.addActionListener(e -> {
@@ -113,33 +108,85 @@ public class RegistryTab extends Tab {
         });
     }
 
+    public void placeCaregiverRegistrySheet() {
+        caregiverRegistrySheetModel = new DefaultTableModel(0, 3);
+
+        Object[] columnNames = {"Caregiver", "Phone", "Email"};
+        caregiverRegistrySheetModel.setColumnIdentifiers(columnNames);
+
+        for (Caregiver c : getController().getRegistry().getCaregiverRegistry()) {
+            Object[] o = new Object[3];
+            o[0] = c.getFullName();
+            o[1] = c.getPhoneNum();
+            o[2] = c.getEmail();
+            caregiverRegistrySheetModel.addRow(o);
+        }
+
+        caregiverRegistrySheet = new JTable(caregiverRegistrySheetModel);
+
+        JScrollPane scrollPane = new JScrollPane(caregiverRegistrySheet);
+        grid0.gridy = 0;
+        caregiverRegistrySheet.setFillsViewportHeight(true);
+        add(scrollPane, grid0);
+    }
+
+    public void placeCaregiverRegistryButtons() {
+        JButton b1 = new JButton(ButtonNames.ADD_CAREGIVER.getValue());
+        JButton b2 = new JButton(ButtonNames.REMOVE_CAREGIVER.getValue());
+
+        JPanel buttonRow = formatButtonRow(b1);
+        buttonRow.add(b2);
+        buttonRow.setLayout(new FlowLayout());
+        grid0.gridy = 1;
+        add(buttonRow, grid0);
+
+        b1.addActionListener(e -> {
+            addWindow("caregiverRegistrySheetModel");
+            // insert at end of addwindow function?
+            caregiverRegistrySheetModel.fireTableDataChanged();
+        });
+
+        b2.addActionListener(e -> {
+            int selected = caregiverRegistrySheet.getSelectedRow();
+
+            if (selected != -1) {
+                caregiverName = caregiverRegistrySheetModel.getValueAt(selected, 0).toString();
+                removeCaregiverFromRegistry();
+                caregiverRegistrySheetModel.removeRow(selected);
+                caregiverRegistrySheetModel.fireTableDataChanged();
+                JOptionPane.showMessageDialog(null, primaryCaregiverName + " removed successfully.");
+            }
+        });
+    }
+
+
     public void addWindow(String tableModelName) {
         addWindow = new JFrame("Add New Person to Registry");
-        addWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addWindow.setResizable(false);
-        addWindow.setSize(WIDTH, HEIGHT);
         addWindow.setVisible(true);
-        addWindow.setBackground(new Color(220, 240, 255));
         ImageIcon icon = new ImageIcon("src\\App_Icon.png");
         addWindow.setIconImage(icon.getImage());
 
         panel1 = new JPanel();
-        panel1.setBackground(new Color(220, 240, 255));
         panel1.setLayout(new GridBagLayout());
         grid1 = new GridBagConstraints();
         grid1.fill = GridBagConstraints.HORIZONTAL;
 
         if (tableModelName.equals("childRegistrySheetModel")) {
+            addWindow.setSize(400, 150);
             placeAddChildWindowFields();
             placeAddChildWindowButtons();
         }
         if (tableModelName.equals("caregiverRegistrySheetModel")) {
+            addWindow.setSize(400, 200);
             placeAddCaregiverWindowFields();
             placeAddCaregiverWindowButtons();
         }
 
         addWindow.add(panel1);
     }
+
 
     public void placeAddChildWindowFields() {
         dialogueAddChild = new JLabel();
@@ -157,6 +204,28 @@ public class RegistryTab extends Tab {
         grid1.gridy = 1;
         panel1.add(childNameField, grid1);
     }
+
+    public void placeAddChildWindowButtons() {
+        JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
+
+        JPanel buttonRow = new JPanel();
+        buttonRow.add(b1);
+        buttonRow.setLayout(new FlowLayout());
+        grid1.gridx = 0;
+        grid1.gridy = 2;
+        panel1.add(buttonRow, grid1);
+
+        b1.addActionListener(e -> {
+            String childName = childNameField.getText();
+            selectCaregiverWindow();
+            Child child = getController().getRegistry().addNewChild(childName, primaryCaregiverName);
+
+            getController().getAttendanceSheet().notCheckedIn(child);
+            dialogueAddChild.setText(child.getFullName() + " added to child registry.\n"
+                    + child.getFullName() + " is not checked in.\n");
+        });
+    }
+
 
     public void placeAddCaregiverWindowFields() {
         dialogueAddCaregiver = new JLabel();
@@ -199,86 +268,12 @@ public class RegistryTab extends Tab {
         panel1.add(caregiverEmailField, grid1);
     }
 
-    public void placeAddChildWindowButtons() {
-        JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
-
-        JPanel buttonRow = new JPanel();
-        buttonRow.add(b1);
-        buttonRow.setBackground(new Color(220, 240, 255));
-        buttonRow.setLayout(new FlowLayout());
-
-        grid1.gridx = 0;
-        grid1.gridy = 2;
-        panel1.add(buttonRow, grid1);
-
-        b1.addActionListener(e -> {
-            String childName = childNameField.getText();
-            selectCaregiverWindow();
-            Child child = getController().getRegistry().addNewChild(childName, primaryCaregiverName);
-
-            getController().getAttendanceSheet().notCheckedIn(child);
-            dialogueAddChild.setText(child.getFullName() + " added to child registry.\n"
-                    + child.getFullName() + " is not checked in.\n");
-        });
-    }
-
-    public void selectCaregiverWindow() {
-        selectCaregiverWindow = new JFrame("Select Primary Caregiver");
-        selectCaregiverWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        selectCaregiverWindow.setResizable(false);
-        selectCaregiverWindow.setSize(WIDTH, HEIGHT);
-        selectCaregiverWindow.setVisible(true);
-        selectCaregiverWindow.setBackground(new Color(220, 240, 255));
-        ImageIcon icon = new ImageIcon("src\\App_Icon.png");
-        selectCaregiverWindow.setIconImage(icon.getImage());
-
-        panel2 = new JPanel();
-        panel2.setBackground(new Color(220, 240, 255));
-        panel2.setLayout(new GridBagLayout());
-        grid2 = new GridBagConstraints();
-        grid2.fill = GridBagConstraints.HORIZONTAL;
-
-        placeCaregiverRegistrySheet();
-        placeSelectCaregiverWindowButtons();
-
-        selectCaregiverWindow.add(panel2);
-    }
-
-    public void placeSelectCaregiverWindowButtons() {
-        JButton b1 = new JButton(ButtonNames.ADD_CAREGIVER.getValue());
-        JButton b2 = new JButton(ButtonNames.SELECT_CAREGIVER.getValue());
-
-        JPanel buttonRow = formatButtonRow(b1);
-        buttonRow.add(b2);
-        buttonRow.setBackground(new Color(220, 240, 255));
-        buttonRow.setLayout(new FlowLayout());
-        grid2.gridx = 0;
-        grid2.gridy = 4;
-        panel2.add(buttonRow, grid2);
-
-        b1.addActionListener(e -> {
-            addWindow("caregiverRegistrySheetModel");
-            // insert at end of addwindow function?
-            caregiverRegistrySheetModel.fireTableDataChanged();
-        });
-
-        b2.addActionListener(e -> {
-            int selected = caregiverRegistrySheet.getSelectedRow();
-
-            if (selected != -1) {
-                primaryCaregiverName = caregiverRegistrySheetModel.getValueAt(selected, 0).toString();
-            }
-        });
-    }
-
     public void placeAddCaregiverWindowButtons() {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 
         JPanel buttonRow = new JPanel();
-        buttonRow.setBackground(new Color(220, 240, 255));
-        buttonRow.setLayout(new FlowLayout());
         buttonRow.add(b1);
-
+        buttonRow.setLayout(new FlowLayout());
         grid1.gridx = 0;
         grid1.gridy = 4;
         panel1.add(buttonRow, grid1);
@@ -300,42 +295,37 @@ public class RegistryTab extends Tab {
         });
     }
 
-    public void placeCaregiverRegistrySheet() {
-        caregiverRegistrySheetModel = new DefaultTableModel(0, 3);
 
-        Object[] columnNames = {"Caregiver", "Phone", "Email"};
-        caregiverRegistrySheetModel.setColumnIdentifiers(columnNames);
+    public void selectCaregiverWindow() {
+        selectCaregiverWindow = new JFrame("Select Primary Caregiver");
+        selectCaregiverWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        selectCaregiverWindow.setResizable(false);
+        selectCaregiverWindow.setSize(500, 400);
+        selectCaregiverWindow.setVisible(true);
+        ImageIcon icon = new ImageIcon("src\\App_Icon.png");
+        selectCaregiverWindow.setIconImage(icon.getImage());
 
-        for (Caregiver c : getController().getRegistry().getCaregiverRegistry()) {
-            Object[] o = new Object[3];
-            o[0] = c.getFullName();
-            o[1] = c.getPhoneNum();
-            o[2] = c.getEmail();
-            caregiverRegistrySheetModel.addRow(o);
-        }
+        panel2 = new JPanel();
+        panel2.setLayout(new GridBagLayout());
+        grid2 = new GridBagConstraints();
+        grid2.fill = GridBagConstraints.HORIZONTAL;
 
-        caregiverRegistrySheet = new JTable(caregiverRegistrySheetModel);
+        placeCaregiverRegistrySheet();
+        placeSelectCaregiverWindowButtons();
 
-        JScrollPane scrollPane = new JScrollPane(caregiverRegistrySheet);
-        grid0.gridx = 0;
-        grid0.gridwidth = 5;
-        grid0.gridy = 0;
-        grid0.gridheight = 4;
-        caregiverRegistrySheet.setFillsViewportHeight(true);
-        add(scrollPane, grid0);
+        selectCaregiverWindow.add(panel2);
     }
 
-    public void placeCaregiverRegistryButtons() {
+    public void placeSelectCaregiverWindowButtons() {
         JButton b1 = new JButton(ButtonNames.ADD_CAREGIVER.getValue());
-        JButton b2 = new JButton(ButtonNames.REMOVE_CAREGIVER.getValue());
+        JButton b2 = new JButton(ButtonNames.SELECT_CAREGIVER.getValue());
 
         JPanel buttonRow = formatButtonRow(b1);
         buttonRow.add(b2);
-        buttonRow.setBackground(new Color(220, 240, 255));
         buttonRow.setLayout(new FlowLayout());
-        grid0.gridx = 0;
-        grid0.gridy = 4;
-        add(buttonRow, grid0);
+        grid2.gridx = 0;
+        grid2.gridy = 4;
+        panel2.add(buttonRow, grid2);
 
         b1.addActionListener(e -> {
             addWindow("caregiverRegistrySheetModel");
@@ -347,11 +337,7 @@ public class RegistryTab extends Tab {
             int selected = caregiverRegistrySheet.getSelectedRow();
 
             if (selected != -1) {
-                caregiverName = caregiverRegistrySheetModel.getValueAt(selected, 0).toString();
-                removeCaregiverFromRegistry();
-                caregiverRegistrySheetModel.removeRow(selected);
-                caregiverRegistrySheetModel.fireTableDataChanged();
-                JOptionPane.showMessageDialog(null, primaryCaregiverName + " removed successfully.");
+                primaryCaregiverName = caregiverRegistrySheetModel.getValueAt(selected, 0).toString();
             }
         });
     }
