@@ -1,6 +1,8 @@
 {
-    "name": "CPSC 210",
-    "childRegistry": [
+    "checkedOut": [],
+    "checkedIn": [],
+    "name": "Lab",
+    "notCheckedIn": [
         {
             "primaryCaregiver": {
                 "fullName": "Ada Lovelace",
@@ -12,7 +14,6 @@
                 "phoneNum": 6041234567,
                 "email": "alovelace@gmail.com"
             }],
-            "checkInTime": "12:16:55.012354400",
             "fullName": "David Lovelace"
         },
         {
@@ -39,7 +40,6 @@
                 "phoneNum": 6043456789,
                 "email": "jhoover@ubc.ca"
             }],
-            "checkInTime": "12:17:04.045817300",
             "fullName": "Sam Hoover"
         },
         {
@@ -53,7 +53,6 @@
                 "phoneNum": 7788221234,
                 "email": "awang@yahoo.ca"
             }],
-            "checkInTime": "12:17:07.095005",
             "fullName": "John Wang"
         },
         {
@@ -81,38 +80,6 @@
                 "email": "alovelace@gmail.com"
             }],
             "fullName": "Lisa Lovelace"
-        }
-    ],
-    "caregiverRegistry": [
-        {
-            "fullName": "Ada Lovelace",
-            "phoneNum": 6041234567,
-            "email": "alovelace@gmail.com"
-        },
-        {
-            "fullName": "Bob Lovelace",
-            "phoneNum": 6045558888,
-            "email": "blovelace@gmail.com"
-        },
-        {
-            "fullName": "Alice Wang",
-            "phoneNum": 7788221234,
-            "email": "awang@yahoo.ca"
-        },
-        {
-            "fullName": "Janet Hoover",
-            "phoneNum": 6043456789,
-            "email": "jhoover@ubc.ca"
-        },
-        {
-            "fullName": "Jane Black",
-            "phoneNum": 7784441234,
-            "email": "jblack@yahoo.ca"
-        },
-        {
-            "fullName": "Alex Sokolov",
-            "phoneNum": 6043334567,
-            "email": "asokolov@gmail.com"
         }
     ]
 }

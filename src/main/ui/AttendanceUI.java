@@ -364,9 +364,7 @@ public class AttendanceUI extends JFrame {
     // EFFECTS: Saves the attendance sheet and registry to file.
     public void saveState() {
         try {
-            jsonWriter.open();
             jsonWriter.write(attendanceSheet, registry);
-            jsonWriter.close();
             System.out.println("Saved " + attendanceSheet.getName() + " attendance sheet to "
                     + JSON_STORE_ATTENDANCE + "\n");
             System.out.println("Saved " + registry.getName() + " registry to " + JSON_STORE_REGISTRY + "\n");

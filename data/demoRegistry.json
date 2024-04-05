@@ -12,7 +12,6 @@
                 "phoneNum": 6041234567,
                 "email": "alovelace@gmail.com"
             }],
-            "checkInTime": "12:16:55.012354400",
             "fullName": "David Lovelace"
         },
         {
@@ -39,7 +38,6 @@
                 "phoneNum": 6043456789,
                 "email": "jhoover@ubc.ca"
             }],
-            "checkInTime": "12:17:04.045817300",
             "fullName": "Sam Hoover"
         },
         {
@@ -53,7 +51,6 @@
                 "phoneNum": 7788221234,
                 "email": "awang@yahoo.ca"
             }],
-            "checkInTime": "12:17:07.095005",
             "fullName": "John Wang"
         },
         {

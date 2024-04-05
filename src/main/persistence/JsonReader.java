@@ -108,8 +108,7 @@ public class JsonReader {
         } else {
             checkOutTime = null;
         }
-        Child child = new Child(fullName, null);
-        addPrimaryCaregiver(child, registryPrimaryCaregiver);
+        Child child = new Child(fullName, registryPrimaryCaregiver);
         addMultipleSecondaryCaregivers(child, childJsonObject, registry);
         child.setCheckInTime(checkInTime);
         child.setCheckOutTime(checkOutTime);
@@ -123,13 +122,13 @@ public class JsonReader {
         return registry.selectCaregiver(caregiver.getFullName());
     }
 
-    // REQUIRES: primaryCaregiver exists.
-    // MODIFIES: Child
-    // EFFECTS: Sets given caregiver to given child's primaryCaregiver and addAuthorizedToPickUp.
-    private void addPrimaryCaregiver(Child child, Caregiver primaryCaregiver) {
-        child.setPrimaryCaregiver(primaryCaregiver);
-        child.addAuthorizedToPickUp(primaryCaregiver);
-    }
+//    // REQUIRES: primaryCaregiver exists.
+//    // MODIFIES: Child
+//    // EFFECTS: Sets given caregiver to given child's primaryCaregiver and addAuthorizedToPickUp.
+//    private void addPrimaryCaregiver(Child child, Caregiver primaryCaregiver) {
+//        child.setPrimaryCaregiver(primaryCaregiver);
+//        child.addAuthorizedToPickUp(primaryCaregiver);
+//    }
 
     // REQUIRES: Every caregiver exists in caregiverRegistry of registry.
     // MODIFIES: Child
@@ -149,7 +148,9 @@ public class JsonReader {
     //          authorizedToPickUp.
     private void addSecondaryCaregiverFromRegistry(Child child, JSONObject jsonObject, Registry registry) {
         Caregiver registryCaregiver = parseCaregiverFromRegistry(jsonObject, registry);
-        child.addAuthorizedToPickUp(registryCaregiver);
+        if (!registryCaregiver.equals(child.getPrimaryCaregiver())) {
+            child.addAuthorizedToPickUp(registryCaregiver);
+        }
     }
 
 

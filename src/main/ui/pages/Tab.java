@@ -10,8 +10,6 @@ public abstract class Tab extends JPanel {
     private final AttendanceUI controller;
 
     public Tab(AttendanceUI controller) {
-        setLayout(new GridBagLayout());
-
         this.controller = controller;
     }
 

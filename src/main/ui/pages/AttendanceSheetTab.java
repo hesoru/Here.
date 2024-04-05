@@ -8,23 +8,28 @@ import ui.ButtonNames;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalTime;
 
 public class AttendanceSheetTab extends Tab {
 
-    GridBagConstraints grid0;
-    JPanel panel1;
-    GridBagConstraints grid1;
-    JFrame authorizedCaregiverWindow;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 525;
 
-    DefaultTableModel notYetCheckedInSheetModel;
-    DefaultTableModel checkedInSheetModel;
-    DefaultTableModel checkedOutSheetModel;
+    JPanel panel0;
+
+    SelectAuthorizedCaregiverWindow authorizedCaregiverWindow;
+
+    DefaultTableModel notYetCheckedInSheetModel = new DefaultTableModel(0, 4);
+    DefaultTableModel checkedInSheetModel = new DefaultTableModel(0, 2);
+    DefaultTableModel checkedOutSheetModel = new DefaultTableModel(0, 3);
     DefaultTableModel authorizedCaregiverSheetModel;
+
+    DefaultTableModel tableModel;
+    AttendanceSheetWindow attendanceSheetWindow;
 
     JTable notYetCheckedInSheet;
     JTable checkedInSheet;
     JTable checkedOutSheet;
-    JTable authorizedCaregiverSheet;
 
     String childToCheckInName;
     Child childToCheckIn;
@@ -33,34 +38,33 @@ public class AttendanceSheetTab extends Tab {
     String caregiverToCheckOutName;
     Caregiver caregiverToCheckOut;
 
-    public AttendanceSheetTab(AttendanceUI controller, String sheetType) {
+    public AttendanceSheetTab(AttendanceUI controller, AttendanceSheetWindow attendanceSheetWindow, String tabType) {
         super(controller);
+        this.attendanceSheetWindow = attendanceSheetWindow;
 
-        grid0 = new GridBagConstraints();
-        grid0.fill = GridBagConstraints.HORIZONTAL;
+        panel0 = new JPanel(new BorderLayout());
 
-        if (sheetType.equals("NotYetCheckedIn")) {
+        if (tabType.equals("NotYetCheckedIn")) {
             placeNotYetCheckedInSheet();
             placeNotYetCheckedInButtons();
         }
-        if (sheetType.equals("CheckedIn")) {
+        if (tabType.equals("CheckedIn")) {
             placeCheckedInSheet();
             placeCheckedInButtons();
         }
-        if (sheetType.equals("CheckedOut")) {
+        if (tabType.equals("CheckedOut")) {
             placeCheckedOutSheet();
         }
-        if (sheetType.equals("Settings")) {
+        if (tabType.equals("Settings")) {
             placeSettingsButtons();
         }
+
+        add(panel0);
     }
 
     public void placeNotYetCheckedInSheet() {
-        notYetCheckedInSheetModel = new DefaultTableModel(0, 4);
-
         Object[] columnNames = {"Not Yet Checked In", "Primary Caregiver", "Caregiver Phone", "Caregiver Email"};
         notYetCheckedInSheetModel.setColumnIdentifiers(columnNames);
-
         for (Child c : getController().getAttendanceSheet().getNotCheckedIn()) {
             Object[] o = new Object[4];
             o[0] = c.getFullName();
@@ -69,16 +73,23 @@ public class AttendanceSheetTab extends Tab {
             o[3] = c.getPrimaryCaregiver().getEmail();
             notYetCheckedInSheetModel.addRow(o);
         }
+        attendanceSheetWindow.setNotYetCheckedInSheetModel(notYetCheckedInSheetModel);
+        notYetCheckedInSheet = new JTable(notYetCheckedInSheetModel) {
+            public boolean getScrollableTracksViewportWidth() {
+                return true;
+            }
+        };
 
-        notYetCheckedInSheet = new JTable(notYetCheckedInSheetModel);
-
-        JScrollPane scrollPane = new JScrollPane(notYetCheckedInSheet);
-        grid0.gridx = 0;
-        grid0.gridwidth = 5;
-        grid0.gridy = 0;
-        grid0.gridheight = 4;
+        notYetCheckedInSheet.setAutoCreateRowSorter(true);
+        notYetCheckedInSheet.setRowHeight(30);
         notYetCheckedInSheet.setFillsViewportHeight(true);
-        add(scrollPane, grid0);
+        notYetCheckedInSheet.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        JScrollPane scrollPane = new JScrollPane(notYetCheckedInSheet,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setSize(panel0.getWidth(), panel0.getHeight());
+        panel0.add(scrollPane, BorderLayout.CENTER);
     }
 
     public void placeNotYetCheckedInButtons() {
@@ -86,64 +97,58 @@ public class AttendanceSheetTab extends Tab {
 
         JPanel buttonRow = formatButtonRow(b1);
         buttonRow.setLayout(new FlowLayout());
-        grid0.gridx = 2;
-        grid0.gridy = 4;
-        add(buttonRow, grid0);
+        buttonRow.setSize(WIDTH, HEIGHT / 5);
+        panel0.add(buttonRow, BorderLayout.SOUTH);
 
         b1.addActionListener(e -> {
             int selected = notYetCheckedInSheet.getSelectedRow();
 
-            Object[] rowData = new Object[2];
-            rowData[0] = childToCheckInName;
-            rowData[1] = childToCheckIn.getCheckInTime();
-
             if (selected != -1) {
                 childToCheckInName = notYetCheckedInSheetModel.getValueAt(selected, 0).toString();
-                checkInChild();
-                checkedInSheetModel.addRow(rowData);
-                notYetCheckedInSheetModel.removeRow(selected);
-                notYetCheckedInSheetModel.fireTableDataChanged();
-                checkedInSheetModel.fireTableDataChanged();
+                attendanceSheetWindow.checkInChild(childToCheckInName);
+                Child childToCheckIn = getController().getRegistry().selectChild(childToCheckInName);
+
+                Object[] rowData = new Object[2];
+                rowData[0] = childToCheckInName;
+                rowData[1] = childToCheckIn.getCheckInTime();
+                attendanceSheetWindow.getCheckedInSheetModel().addRow(rowData);
+                attendanceSheetWindow.getNotYetCheckedInSheetModel().removeRow(selected);
+
+                attendanceSheetWindow.getNotYetCheckedInSheetModel().fireTableDataChanged();
+                attendanceSheetWindow.getCheckedInSheetModel().fireTableDataChanged();
+
                 JOptionPane.showMessageDialog(null, childToCheckInName + " checked in at "
                         + childToCheckIn.getCheckInTime());
             }
         });
     }
 
-    // REQUIRES: childFullName is first and last name separated by a space (case-sensitive).
-    // MODIFIES: this, AttendanceSheet, Child
-    // EFFECTS: Selects a child in the child registry with a full name matching the user input (case-sensitive). If
-    //          child is not checked in yet, then this method removes the child from the list of notCheckedIn and adds
-    //          them to the checkedIn list, and sets the child's check-in time to the current time. Prints that the
-    //          child checked in at the check-in time. Otherwise, prints that the child was not found in list of
-    //          children not yet checked in.
-    public void checkInChild() {
-        childToCheckIn = getController().getRegistry().selectChild(childToCheckInName);
-        getController().getAttendanceSheet().checkIn(childToCheckIn);
-    }
-
     public void placeCheckedInSheet() {
-        checkedInSheetModel = new DefaultTableModel(0, 2);
-
         Object[] columnNames = {"Checked In", "Check In Time"};
         checkedInSheetModel.setColumnIdentifiers(columnNames);
-
         for (Child c : getController().getAttendanceSheet().getCheckedIn()) {
             Object[] o = new Object[2];
             o[0] = c.getFullName();
             o[1] = c.getCheckInTime();
             checkedInSheetModel.addRow(o);
         }
+        attendanceSheetWindow.setCheckedInSheetModel(checkedInSheetModel);
+        checkedInSheet = new JTable(checkedInSheetModel) {
+            public boolean getScrollableTracksViewportWidth() {
+                return true;
+            }
+        };
 
-        checkedInSheet = new JTable(checkedInSheetModel);
-
-        JScrollPane scrollPane = new JScrollPane(checkedInSheet);
-        grid0.gridx = 0;
-        grid0.gridwidth = 5;
-        grid0.gridy = 0;
-        grid0.gridheight = 4;
+        checkedInSheet.setAutoCreateRowSorter(true);
+        checkedInSheet.setRowHeight(30);
         checkedInSheet.setFillsViewportHeight(true);
-        add(scrollPane, grid0);
+        checkedInSheet.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        JScrollPane scrollPane = new JScrollPane(checkedInSheet,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setSize(panel0.getWidth(), panel0.getHeight());
+        panel0.add(scrollPane, BorderLayout.CENTER);
     }
 
     public void placeCheckedInButtons() {
@@ -151,103 +156,22 @@ public class AttendanceSheetTab extends Tab {
 
         JPanel buttonRow = formatButtonRow(b1);
         buttonRow.setLayout(new FlowLayout());
-        grid0.gridx = 2;
-        grid0.gridy = 4;
-        add(buttonRow, grid0);
+        buttonRow.setSize(WIDTH, HEIGHT / 5);
+        panel0.add(buttonRow, BorderLayout.SOUTH);
 
         b1.addActionListener(e -> {
             int selected = checkedInSheet.getSelectedRow();
 
             if (selected != -1) {
-                childToCheckOutName = authorizedCaregiverSheetModel.getValueAt(selected, 0).toString();
-                authorizedCaregiverWindow(childToCheckOut);
-            }
-
-            Object[] rowData = new Object[2];
-            rowData[0] = childToCheckOutName;
-            rowData[1] = childToCheckOut.getCheckOutTime();
-
-            if (selected != -1) {
-                childToCheckOutName = authorizedCaregiverSheetModel.getValueAt(selected, 0).toString();
-                checkOutChild();
-                checkedOutSheetModel.addRow(rowData);
-                checkedInSheetModel.removeRow(selected);
-                checkedInSheetModel.fireTableDataChanged();
-                checkedOutSheetModel.fireTableDataChanged();
-                JOptionPane.showMessageDialog(null, childToCheckOutName + " checked out at "
-                        + childToCheckOut.getCheckOutTime() + " by " + caregiverToCheckOutName);
+                childToCheckOutName = checkedInSheet.getValueAt(selected, 0).toString();
+                childToCheckOut = getController().getRegistry().selectChild(childToCheckOutName);
+                authorizedCaregiverWindow = new SelectAuthorizedCaregiverWindow(attendanceSheetWindow, this, getController(), selected);
             }
         });
     }
 
-    public void authorizedCaregiverWindow(Child child) {
-        authorizedCaregiverWindow = new JFrame();
-        authorizedCaregiverWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        panel1 = new JPanel();
-        panel1.setLayout(new GridBagLayout());
-        grid1 = new GridBagConstraints();
-        grid1.fill = GridBagConstraints.HORIZONTAL;
-
-        placeAuthorizedCaregiverSheet(child);
-        placeAuthorizedCaregiverButtons(child);
-
-        authorizedCaregiverWindow.add(panel1);
-    }
-
-    public void placeAuthorizedCaregiverSheet(Child child) {
-        authorizedCaregiverSheetModel = new DefaultTableModel(0, 3);
-
-        Object[] columnNames = {"Authorized To Pick Up", "Phone", "Email"};
-        authorizedCaregiverSheetModel.setColumnIdentifiers(columnNames);
-
-        for (Caregiver c : child.getAuthorizedToPickUp()) {
-            Object[] o = new Object[3];
-            o[0] = c.getFullName();
-            o[1] = c.getPhoneNum();
-            o[2] = c.getEmail();
-            authorizedCaregiverSheetModel.addRow(o);
-        }
-
-        authorizedCaregiverSheet = new JTable(authorizedCaregiverSheetModel);
-
-        JScrollPane scrollPane = new JScrollPane(authorizedCaregiverSheet);
-        grid1.gridx = 0;
-        grid1.gridwidth = 5;
-        grid1.gridy = 0;
-        grid1.gridheight = 4;
-        authorizedCaregiverSheet.setFillsViewportHeight(true);
-        panel1.add(scrollPane, grid1);
-    }
-
-    public void placeAuthorizedCaregiverButtons(Child child) {
-        JButton b1 = new JButton(ButtonNames.SELECT_PICKUP.getValue());
-
-        JPanel buttonRow = formatButtonRow(b1);
-        buttonRow.setLayout(new FlowLayout());
-        grid1.gridx = 2;
-        grid1.gridy = 4;
-        panel1.add(buttonRow, grid1);
-
-        b1.addActionListener(e -> {
-            int selected = authorizedCaregiverSheet.getSelectedRow();
-
-            Object[] rowData = new Object[3];
-            rowData[0] = child.getFullName();
-            rowData[1] = childToCheckOut.getCheckOutTime();
-            rowData[2] = caregiverToCheckOutName;
-
-            if (selected != -1) {
-                caregiverToCheckOutName = authorizedCaregiverSheetModel.getValueAt(selected, 0).toString();
-                checkOutChild();
-                checkedOutSheetModel.addRow(rowData);
-                authorizedCaregiverSheetModel.removeRow(selected);
-                authorizedCaregiverSheetModel.fireTableDataChanged();
-                checkedOutSheetModel.fireTableDataChanged();
-                JOptionPane.showMessageDialog(null, childToCheckOutName + " checked out at "
-                        + childToCheckOut.getCheckOutTime() + " by " + caregiverToCheckOutName);
-                authorizedCaregiverWindow.dispose();
-            }
-        });
+    public void setAuthorizedCaregiverSheetModel(DefaultTableModel authorizedCaregiverSheetModel) {
+        this.authorizedCaregiverSheetModel = authorizedCaregiverSheetModel;
     }
 
     // REQUIRES: childToCheckOut exists in child registry (!null).
@@ -261,19 +185,10 @@ public class AttendanceSheetTab extends Tab {
     //          entered does not exist, then the method directs the user to add a new caregiver and then returns the
     //          user to the beginning of the method. Prints if the caregiver is not authorized to pick
     //          up the child and/or if the child has not checked in today.
-    private void checkOutChild() {
-        childToCheckOut = getController().getRegistry().selectChild(childToCheckOutName);
-        caregiverToCheckOut = childToCheckOut.getCheckOutCaregiver();
-
-        getController().getAttendanceSheet().checkOut(childToCheckOut, caregiverToCheckOut);
-    }
 
     public void placeCheckedOutSheet() {
-        checkedOutSheetModel = new DefaultTableModel(0, 3);
-
         Object[] columnNames = {"Checked Out", "Check Out Time", "Caregiver Checking Out"};
         checkedOutSheetModel.setColumnIdentifiers(columnNames);
-
         for (Child c : getController().getAttendanceSheet().getCheckedOut()) {
             Object[] o = new Object[3];
             o[0] = c.getFullName();
@@ -281,31 +196,63 @@ public class AttendanceSheetTab extends Tab {
             o[2] = c.getCheckOutCaregiver();
             checkedOutSheetModel.addRow(o);
         }
+        attendanceSheetWindow.setCheckedOutSheetModel(checkedOutSheetModel);
+        checkedOutSheet = new JTable(checkedOutSheetModel) {
+            public boolean getScrollableTracksViewportWidth() {
+                return true;
+            }
+        };
 
-        checkedOutSheet = new JTable(checkedOutSheetModel);
-
-        JScrollPane scrollPane = new JScrollPane(checkedOutSheet);
-        grid0.gridx = 0;
-        grid0.gridwidth = 5;
-        grid0.gridy = 0;
-        grid0.gridheight = 4;
+        checkedOutSheet.setAutoCreateRowSorter(true);
+        checkedOutSheet.setRowHeight(30);
         checkedOutSheet.setFillsViewportHeight(true);
-        add(scrollPane, grid0);
+        checkedOutSheet.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        JScrollPane scrollPane = new JScrollPane(checkedOutSheet,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setSize(panel0.getWidth(), panel0.getHeight());
+        panel0.add(scrollPane, BorderLayout.CENTER);
     }
 
     public void placeSettingsButtons() {
         JButton b1 = new JButton(ButtonNames.RESET.getValue());
+        JButton b2 = new JButton(ButtonNames.SAVE.getValue());
 
         JPanel buttonRow = formatButtonRow(b1);
+        buttonRow.add(b2);
         buttonRow.setLayout(new FlowLayout());
-        grid0.gridy = 4;
-        add(buttonRow, grid0);
+        buttonRow.setSize(WIDTH, HEIGHT / 5);
+        panel0.add(buttonRow, BorderLayout.CENTER);
 
         b1.addActionListener(e -> {
             super.getController().resetAttendance();
-            notYetCheckedInSheetModel.fireTableDataChanged();
-            checkedInSheetModel.fireTableDataChanged();
-            checkedOutSheetModel.fireTableDataChanged();
+            attendanceSheetWindow.getNotYetCheckedInSheetModel().setRowCount(0);
+            attendanceSheetWindow.getCheckedInSheetModel().setRowCount(0);
+            attendanceSheetWindow.getCheckedOutSheetModel().setRowCount(0);
+            for (Child c : getController().getAttendanceSheet().getNotCheckedIn()) {
+                Object[] o = new Object[4];
+                o[0] = c.getFullName();
+                o[1] = c.getPrimaryCaregiver().getFullName();
+                o[2] = c.getPrimaryCaregiver().getPhoneNum();
+                o[3] = c.getPrimaryCaregiver().getEmail();
+                attendanceSheetWindow.getNotYetCheckedInSheetModel().addRow(o);
+            }
+            attendanceSheetWindow.getNotYetCheckedInSheetModel().fireTableDataChanged();
+//            attendanceSheetWindow.getCheckedInSheetModel().fireTableDataChanged();
+//            attendanceSheetWindow.getCheckedOutSheetModel().fireTableDataChanged();
         });
+
+        b2.addActionListener(e -> {
+            super.getController().saveState();
+        });
+    }
+
+    public Child getChildToCheckOut() {
+        return childToCheckOut;
+    }
+
+    public DefaultTableModel getCheckedOutSheetModel() {
+        return checkedOutSheetModel;
     }
 }

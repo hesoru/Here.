@@ -11,7 +11,6 @@ public class Window extends JFrame {
 
     public Window(String name, AttendanceUI controller) {
         super(name);
-        setResizable(false);
         setVisible(true);
         ImageIcon icon = new ImageIcon("src\\App_Icon.png");
         setIconImage(icon.getImage());

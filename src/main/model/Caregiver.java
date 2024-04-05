@@ -3,6 +3,8 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.util.Objects;
+
 // Contains information pertaining to caregiver of child on child registry/attendance sheet
 public class Caregiver implements Writable {
 
@@ -17,6 +19,14 @@ public class Caregiver implements Writable {
         this.fullName = fullName;
         this.phoneNum = phoneNum;
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        Caregiver caregiver = (Caregiver) o;
+        return Objects.equals(fullName, caregiver.fullName) && Objects.equals(phoneNum, caregiver.phoneNum) && Objects.equals(email, caregiver.email);
     }
 
     @Override
