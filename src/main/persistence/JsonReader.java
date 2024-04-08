@@ -1,9 +1,6 @@
 package persistence;
 
-import model.AttendanceSheet;
-import model.Caregiver;
-import model.Child;
-import model.Registry;
+import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,6 +11,7 @@ import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.stream.Stream;
 
+// reads attendance sheet and registry from JSON files
 public class JsonReader {
     private final String attendanceSource;
     private final String registrySource;
@@ -48,6 +46,8 @@ public class JsonReader {
         String registryName = registryJsonObject.getString("name");
         Registry registry = new Registry(registryName);
         addPeopleToRegistry(registry, registryJsonObject);
+        EventLog.getInstance().logEvent(new Event(registry.getName() + " registry data loaded from "
+                + registrySource));
         return registry;
     }
 
@@ -60,11 +60,15 @@ public class JsonReader {
             JSONObject nextCaregiver = (JSONObject) json;
             addCaregiverToRegistry(registry, nextCaregiver);
         }
+        EventLog.getInstance().logEvent(new Event(registry.getName() + " caregiver registry data loaded from "
+                + registrySource));
         JSONArray jsonArrayChildRegistry = registryJsonObject.getJSONArray("childRegistry");
         for (Object json : jsonArrayChildRegistry) {
             JSONObject nextChild = (JSONObject) json;
             addChildToRegistry(registry, nextChild);
         }
+        EventLog.getInstance().logEvent(new Event(registry.getName() + " child registry data loaded from "
+                + registrySource));
     }
 
     // MODIFIES: Registry, Caregiver
@@ -122,14 +126,6 @@ public class JsonReader {
         return registry.selectCaregiver(caregiver.getFullName());
     }
 
-//    // REQUIRES: primaryCaregiver exists.
-//    // MODIFIES: Child
-//    // EFFECTS: Sets given caregiver to given child's primaryCaregiver and addAuthorizedToPickUp.
-//    private void addPrimaryCaregiver(Child child, Caregiver primaryCaregiver) {
-//        child.setPrimaryCaregiver(primaryCaregiver);
-//        child.addAuthorizedToPickUp(primaryCaregiver);
-//    }
-
     // REQUIRES: Every caregiver exists in caregiverRegistry of registry.
     // MODIFIES: Child
     // EFFECTS: Parses caregivers from authorizedToPickUp from JSON object and selects matching caregivers in registry
@@ -145,14 +141,14 @@ public class JsonReader {
     // REQUIRES: Caregiver exists in caregiverRegistry of registry.
     // MODIFIES: Child
     // EFFECTS: Parses caregiver from JSON object and selects matching caregiver from registry to add to the child's
-    //          authorizedToPickUp.
+    //          authorizedToPickUp. Does not add primary caregiver to authorizedToPickUp, as they are already added
+    //          to authorizedToPickUp when the child is constructed.
     private void addSecondaryCaregiverFromRegistry(Child child, JSONObject jsonObject, Registry registry) {
         Caregiver registryCaregiver = parseCaregiverFromRegistry(jsonObject, registry);
         if (!registryCaregiver.equals(child.getPrimaryCaregiver())) {
             child.addAuthorizedToPickUp(registryCaregiver);
         }
     }
-
 
     // MODIFIES: AttendanceSheet
     // EFFECTS: Reads attendance sheet from file and returns it;
@@ -168,6 +164,8 @@ public class JsonReader {
         String attendanceName = attendanceJsonObject.getString("name");
         AttendanceSheet attendanceSheet = new AttendanceSheet(attendanceName);
         addChildrenFromRegistryToAttendanceSheet(attendanceSheet, registry, attendanceJsonObject);
+        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
+                + " attendance sheet data loaded from " + attendanceSource));
         return attendanceSheet;
     }
 

@@ -20,10 +20,10 @@ public class AttendanceSheetWindow extends Window {
     public static final int CHECKED_OUT_TAB_INDEX = 2;
     public static final int SETTINGS_TAB_INDEX = 3;
 
-    DefaultTableModel notYetCheckedInSheetModel;
-    DefaultTableModel checkedInSheetModel;
-    DefaultTableModel checkedOutSheetModel;
-    DefaultTableModel authorizedCaregiverSheetModel;
+    private DefaultTableModel notYetCheckedInSheetModel;
+    private DefaultTableModel checkedInSheetModel;
+    private DefaultTableModel checkedOutSheetModel;
+    private DefaultTableModel authorizedCaregiverSheetModel;
 
     public AttendanceSheetWindow(AttendanceUI controller) {
         super("Attendance Sheet", controller);

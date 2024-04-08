@@ -19,12 +19,17 @@ public class Caregiver implements Writable {
         this.fullName = fullName;
         this.phoneNum = phoneNum;
         this.email = email;
+        EventLog.getInstance().logEvent(new Event("New caregiver created: " + this.fullName));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Caregiver caregiver = (Caregiver) o;
         return Objects.equals(fullName, caregiver.fullName) && Objects.equals(phoneNum, caregiver.phoneNum) && Objects.equals(email, caregiver.email);
     }

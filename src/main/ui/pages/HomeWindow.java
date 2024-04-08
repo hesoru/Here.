@@ -3,12 +3,8 @@ package ui.pages;
 import ui.AttendanceUI;
 import ui.ButtonNames;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class HomeWindow extends Window {
 

@@ -1,19 +1,16 @@
 package ui;
 
 import model.AttendanceSheet;
-import model.Caregiver;
-import model.Child;
 import model.Registry;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.pages.LoginWindow;
-import ui.pages.RegistryWindow;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 
+// user interface for attendance app
 public class AttendanceUI extends JFrame {
 
     private Registry registry;
@@ -29,20 +26,7 @@ public class AttendanceUI extends JFrame {
 
     private AttendanceUI() {
         new LoginWindow(this);
-
-//        sidebar = new JTabbedPane();
-//        sidebar.setTabPlacement(JTabbedPane.LEFT);
-//
-//        loadTabs();
-//        add(sidebar);
-//
-//        setVisible(true);
     }
-
-    public void loadHomeWindow() {
-
-    }
-
 
     public void createRegistry(String name) {
         this.registry = new Registry(name);
@@ -83,10 +67,6 @@ public class AttendanceUI extends JFrame {
         }
     }
 
-//    // EFFECTS: returns sidebar of this UI
-//    public JTabbedPane getTabbedPane() {
-//        return sidebar;
-//    }
 
 //    private static void listOptions() {
 //        System.out.println("Type the number of an option and press Enter:");

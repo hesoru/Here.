@@ -2,6 +2,7 @@ package ui.pages;
 
 import model.Caregiver;
 import model.Child;
+import model.EventLog;
 import ui.AttendanceUI;
 import ui.ButtonNames;
 

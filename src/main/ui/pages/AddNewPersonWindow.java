@@ -9,10 +9,6 @@ import java.awt.*;
 
 public class AddNewPersonWindow extends Window {
 
-    // add privacy labels!'
-
-    private RegistryTab tab;
-
     private JPanel panel0;
 
     private GridBagConstraints grid0;
@@ -127,7 +123,7 @@ public class AddNewPersonWindow extends Window {
 
         b1.addActionListener(e -> {
             String childName = childNameField.getText();
-            new SelectCaregiverWindow(childName, childRegistrySheetModel, getController());
+            new CaregiverSelectionWindow(childName, childRegistrySheetModel, getController());
         });
     }
 
@@ -231,7 +227,4 @@ public class AddNewPersonWindow extends Window {
 //        });
 //    }
 
-    public RegistryTab getTab() {
-        return tab;
-    }
 }

@@ -15,26 +15,26 @@ public class AttendanceSheetTab extends Tab {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 525;
 
-    JPanel panel0;
+    private JPanel panel0;
 
-    SelectAuthorizedCaregiverWindow authorizedCaregiverWindow;
+    private SelectAuthorizedCaregiverWindow authorizedCaregiverWindow;
 
-    DefaultTableModel notYetCheckedInSheetModel = new DefaultTableModel(0, 4);
-    DefaultTableModel checkedInSheetModel = new DefaultTableModel(0, 2);
-    DefaultTableModel checkedOutSheetModel = new DefaultTableModel(0, 3);
-    DefaultTableModel authorizedCaregiverSheetModel;
+    private DefaultTableModel notYetCheckedInSheetModel = new DefaultTableModel(0, 4);
+    private DefaultTableModel checkedInSheetModel = new DefaultTableModel(0, 2);
+    private DefaultTableModel checkedOutSheetModel = new DefaultTableModel(0, 3);
+    private DefaultTableModel authorizedCaregiverSheetModel;
 
     DefaultTableModel tableModel;
-    AttendanceSheetWindow attendanceSheetWindow;
+    private AttendanceSheetWindow attendanceSheetWindow;
 
-    JTable notYetCheckedInSheet;
-    JTable checkedInSheet;
-    JTable checkedOutSheet;
+    private JTable notYetCheckedInSheet;
+    private JTable checkedInSheet;
+    private JTable checkedOutSheet;
 
-    String childToCheckInName;
+    private String childToCheckInName;
     Child childToCheckIn;
-    String childToCheckOutName;
-    Child childToCheckOut;
+    private String childToCheckOutName;
+    private Child childToCheckOut;
     String caregiverToCheckOutName;
     Caregiver caregiverToCheckOut;
 

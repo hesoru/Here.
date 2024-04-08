@@ -3,12 +3,13 @@ package ui.pages;
 import ui.AttendanceUI;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class Window extends JFrame {
+// abstract class that constructs application windows with an AttendanceUI controller
+public abstract class Window extends JFrame {
 
     public final AttendanceUI controller;
 
+    // EFFECTS: constructs window with a given name and AttendanceUI controller
     public Window(String name, AttendanceUI controller) {
         super(name);
         setVisible(true);
@@ -18,9 +19,8 @@ public class Window extends JFrame {
         this.controller = controller;
     }
 
-    //EFFECTS: returns the AttendanceUI controller for this tab
+    // EFFECTS: returns the AttendanceUI controller for this window
     public AttendanceUI getController() {
         return controller;
     }
-
 }

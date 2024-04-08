@@ -28,6 +28,8 @@ public class Child implements Writable {
         this.checkInTime = null;
         this.checkOutTime = null;
         this.checkOutCaregiver = null;
+        EventLog.getInstance().logEvent(new Event("New child created: " + this.fullName
+                + ". Primary caregiver is " + this.primaryCaregiver + "."));
     }
 
     @Override
@@ -56,10 +58,6 @@ public class Child implements Writable {
     // EFFECTS: Adds caregiver to authorizedToPickUp list of child.
     public void addAuthorizedToPickUp(Caregiver authorizedToPickUp) {
         this.authorizedToPickUp.add(authorizedToPickUp);
-    }
-
-    public void setPrimaryCaregiver(Caregiver primaryCaregiver) {
-        this.primaryCaregiver = primaryCaregiver;
     }
 
     public String getFullName() {
@@ -92,6 +90,10 @@ public class Child implements Writable {
 
     public void setCheckOutTime(LocalTime checkOutTime) {
         this.checkOutTime = checkOutTime;
+    }
+
+    public void setPrimaryCaregiver(Caregiver primaryCaregiver) {
+        this.primaryCaregiver = primaryCaregiver;
     }
 
 }

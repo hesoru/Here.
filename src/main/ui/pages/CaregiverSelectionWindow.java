@@ -9,24 +9,24 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class SelectCaregiverWindow extends Window {
+// constructs option window to select primary caregiver of child
+public class CaregiverSelectionWindow extends Window {
 
-    RegistryTab tab;
+    public static final int WIDTH = 600;
+    public static final int HEIGHT = 525;
 
     private JPanel panel0;
 
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 525;
-
-    DefaultTableModel caregiverRegistrySheetModel;
-    JTable caregiverRegistrySheet;
-
+    private DefaultTableModel caregiverRegistrySheetModel;
     private DefaultTableModel childRegistrySheetModel;
+
+    private JTable caregiverRegistrySheet;
 
     private JLabel instruction;
     private static final String INSTRUCTION_TEXT = "Select the primary caregiver of the child, or add a new caregiver to select.";
 
-    public SelectCaregiverWindow(String childName, DefaultTableModel childRegistrySheetModel, AttendanceUI controller) {
+    // EFFECTS: constructs option window to select primary caregiver of child
+    public CaregiverSelectionWindow(String childName, DefaultTableModel childRegistrySheetModel, AttendanceUI controller) {
         super("Select Primary Caregiver", controller);
         this.childRegistrySheetModel = childRegistrySheetModel;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -41,6 +41,8 @@ public class SelectCaregiverWindow extends Window {
         add(panel0);
     }
 
+    // MODIFIES: this
+    // EFFECTS: places instructions to select caregiver
     public void placeInstruction() {
         instruction = new JLabel(INSTRUCTION_TEXT, JLabel.CENTER);
         instruction.setVerticalAlignment(JLabel.CENTER);
@@ -48,6 +50,8 @@ public class SelectCaregiverWindow extends Window {
         panel0.add(instruction, BorderLayout.NORTH);
     }
 
+    // MODIFIES: this
+    // EFFECTS: populates caregiver registry table model and creates table
     public void placeSelectCaregiverRegistrySheet() {
         caregiverRegistrySheetModel = new DefaultTableModel(0, 3);
         Object[] columnNames = {"Caregiver", "Phone", "Email"};

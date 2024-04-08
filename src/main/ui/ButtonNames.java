@@ -20,11 +20,12 @@ public enum ButtonNames {
 
     private final String name;
 
+    // EFFECTS: constructs button name
     ButtonNames(String name) {
         this.name = name;
     }
 
-    //EFFECTS: returns name value of this button
+    // EFFECTS: returns name value of this button
     public String getValue() {
         return name;
     }

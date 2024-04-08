@@ -18,6 +18,7 @@ public class Registry implements Writable {
         this.name = name;
         this.childRegistry = new ArrayList<>();
         this.caregiverRegistry = new ArrayList<>();
+        EventLog.getInstance().logEvent(new Event("New registry created: " + this.name));
     }
 
     // REQUIRES: caregiverFullName is first and last name separated by a space (case-sensitive), caregiverPhoneNum is
@@ -27,6 +28,7 @@ public class Registry implements Writable {
     public void addNewCaregiver(String caregiverFullName, Long caregiverPhoneNum, String caregiverEmail) {
         Caregiver caregiver = new Caregiver(caregiverFullName, caregiverPhoneNum, caregiverEmail);
         caregiverRegistry.add(caregiver);
+        EventLog.getInstance().logEvent(new Event(caregiver.getFullName() + "added to caregiver registry."));
     }
 
     // REQUIRES: childFullName and caregiverFullName is first and last name separated by a space (case-sensitive).
@@ -40,6 +42,7 @@ public class Registry implements Writable {
         if (primaryCaregiver != null) {
             Child child = new Child(childFullName, primaryCaregiver);
             childRegistry.add(child);
+            EventLog.getInstance().logEvent(new Event(child.getFullName() + "added to child registry."));
             return child;
         }
         return null;
@@ -88,6 +91,7 @@ public class Registry implements Writable {
 
         if (confirmChoice.equals("yes")) {
             caregiverRegistry.remove(caregiver);
+            EventLog.getInstance().logEvent(new Event(caregiver.getFullName() + "removed from caregiver registry."));
             return "caregiver removed";
         }
         return "choice not confirmed";
@@ -104,6 +108,7 @@ public class Registry implements Writable {
 
         if (confirmChoice.equals("yes")) {
             childRegistry.remove(child);
+            EventLog.getInstance().logEvent(new Event(child.getFullName() + "removed from child registry."));
             return "child removed";
         }
         return "choice not confirmed";
@@ -115,6 +120,7 @@ public class Registry implements Writable {
         json.put("name", name);
         json.put("childRegistry", childRegistryToJson());
         json.put("caregiverRegistry", caregiverRegistryToJson());
+        EventLog.getInstance().logEvent(new Event(this.name + " registry data written to JSON file."));
         return json;
     }
 
@@ -124,6 +130,7 @@ public class Registry implements Writable {
         for (Child c : childRegistry) {
             jsonArray.put(c.toJson());
         }
+        EventLog.getInstance().logEvent(new Event("Child registry data written to JSON file."));
         return jsonArray;
     }
 
@@ -133,6 +140,7 @@ public class Registry implements Writable {
         for (Caregiver c : caregiverRegistry) {
             jsonArray.put(c.toJson());
         }
+        EventLog.getInstance().logEvent(new Event("Caregiver registry data written to JSON file."));
         return jsonArray;
     }
 
