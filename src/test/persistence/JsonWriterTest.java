@@ -16,9 +16,11 @@ public class JsonWriterTest extends JsonTest {
     @Test
     void testWriterInvalidFile() {
         try {
+            AttendanceSheet attendanceSheet = new AttendanceSheet("Field Trip");
+            Registry registry = new Registry("CPSC 210");
             JsonWriter writer = new JsonWriter("./data/my\0illegal:attendancefileName.json",
                     "./data/my\0illegal:registryfileName.json");
-            writer.open();
+            writer.write(attendanceSheet, registry);
             fail("IOException was expected");
         } catch (IOException e) {
             // pass
@@ -34,9 +36,7 @@ public class JsonWriterTest extends JsonTest {
                 Registry registry = new Registry("CPSC 210");
                 JsonWriter writer = new JsonWriter("./data/testWriterEmptyAttendance.json",
                         "./data/testWriterEmptyRegistry.json");
-                writer.open();
                 writer.write(attendanceSheet, registry);
-                writer.close();
             }
 
             JsonReader reader = new JsonReader("./data/testWriterEmptyAttendance.json",
@@ -93,9 +93,7 @@ public class JsonWriterTest extends JsonTest {
                 assertEquals(1, attendanceSheet.getCheckedOut().size());
                 JsonWriter writer = new JsonWriter("./data/testWriterGeneralAttendance.json",
                         "./data/testWriterGeneralRegistry.json");
-                writer.open();
                 writer.write(attendanceSheet, registry);
-                writer.close();
             }
 
             JsonReader reader = new JsonReader("./data/testWriterGeneralAttendance.json",
