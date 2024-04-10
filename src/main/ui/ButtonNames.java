@@ -1,5 +1,6 @@
 package ui;
 
+// Provides text inside buttons for attendance application UI
 public enum ButtonNames {
     SUBMIT("SUBMIT"),
     LOAD("Load app data from file."),
@@ -11,21 +12,20 @@ public enum ButtonNames {
     SELECT_PICKUP("Select caregiver to pick up this child."),
     SELECT_CAREGIVER("Select primary caregiver for new child."),
     ADD_CAREGIVER("Add a caregiver."),
-    ADD_AUTHORIZED_CAREGIVER("Add authorized caregiver for this child."),
     REMOVE_CAREGIVER("Remove selected caregiver."),
     ATTENDANCE("ATTENDANCE SHEET"),
     REGISTRY("REGISTRY"),
-    SAVE("Save data"),
+    SAVE("SAVE"),
     RESET("RESET ATTENDANCE SHEET");
 
     private final String name;
 
-    // EFFECTS: constructs button name
+    // EFFECTS: Constructs button name
     ButtonNames(String name) {
         this.name = name;
     }
 
-    // EFFECTS: returns name value of this button
+    // EFFECTS: Returns name value of this button
     public String getValue() {
         return name;
     }

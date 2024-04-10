@@ -6,14 +6,18 @@ import ui.ButtonNames;
 import javax.swing.*;
 import java.awt.*;
 
+// Creates window that asks user whether to load existing app data or create new app data
 public class ChooseDataWindow extends Window {
 
     public static final int WIDTH = 500;
     public static final int HEIGHT = 150;
 
-    private static final String INSTRUCTION_TEXT = "Select whether to load app data from an existing file or create new app data.";
     private JLabel instruction;
+    private static final String INSTRUCTION_TEXT = "Select whether to load app data from an existing file or "
+            + "create new app data.";
 
+    // REQUIRES: Argument must exist (!=null)
+    // EFFECTS: Constructs window that asks user whether to load existing app data or create new app data.
     public ChooseDataWindow(AttendanceUI controller) {
         super("Load Data", controller);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,14 +30,18 @@ public class ChooseDataWindow extends Window {
         placeButtons();
     }
 
-    private void placeInstruction() {
+    // MODIFIES: this
+    // EFFECTS: Places instruction asking user whether to load existing app data or create new app data.
+    public void placeInstruction() {
         instruction = new JLabel(INSTRUCTION_TEXT, JLabel.CENTER);
         instruction.setSize(WIDTH, HEIGHT / 3);
         add(instruction);
     }
 
-    //EFFECTS: creates buttons
-    private void placeButtons() {
+    // MODIFIES: this, JsonWriter, JsonReader, HomeWindow, NewDataWindow
+    // EFFECTS: Creates JsonWriter and JsonReader, and places button to either load existing app data or create new
+    //          app data.
+    public void placeButtons() {
         JButton b1 = new JButton(ButtonNames.LOAD.getValue());
         JButton b2 = new JButton(ButtonNames.NEW.getValue());
 

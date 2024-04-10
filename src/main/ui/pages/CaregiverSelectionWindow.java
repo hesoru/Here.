@@ -9,24 +9,26 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-// constructs option window to select primary caregiver of child
+// Constructs option window to select primary caregiver of child
 public class CaregiverSelectionWindow extends Window {
 
     public static final int WIDTH = 600;
     public static final int HEIGHT = 525;
 
-    private JPanel panel0;
+    private final JPanel panel0;
 
     private DefaultTableModel caregiverRegistrySheetModel;
-    private DefaultTableModel childRegistrySheetModel;
+    private final DefaultTableModel childRegistrySheetModel;
 
     private JTable caregiverRegistrySheet;
 
     private JLabel instruction;
-    private static final String INSTRUCTION_TEXT = "Select the primary caregiver of the child, or add a new caregiver to select.";
+    private static final String INSTRUCTION_TEXT = "Select the primary caregiver of the child, "
+            + "or add a new caregiver to select.";
 
-    // EFFECTS: constructs option window to select primary caregiver of child
-    public CaregiverSelectionWindow(String childName, DefaultTableModel childRegistrySheetModel, AttendanceUI controller) {
+    // EFFECTS: Constructs option window to select primary caregiver of child
+    public CaregiverSelectionWindow(String childName, DefaultTableModel childRegistrySheetModel,
+                                    AttendanceUI controller) {
         super("Select Primary Caregiver", controller);
         this.childRegistrySheetModel = childRegistrySheetModel;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -42,7 +44,7 @@ public class CaregiverSelectionWindow extends Window {
     }
 
     // MODIFIES: this
-    // EFFECTS: places instructions to select caregiver
+    // EFFECTS: Places instructions to select caregiver.
     public void placeInstruction() {
         instruction = new JLabel(INSTRUCTION_TEXT, JLabel.CENTER);
         instruction.setVerticalAlignment(JLabel.CENTER);
@@ -51,7 +53,7 @@ public class CaregiverSelectionWindow extends Window {
     }
 
     // MODIFIES: this
-    // EFFECTS: populates caregiver registry table model and creates table
+    // EFFECTS: Populates caregiver registry table model and creates table
     public void placeSelectCaregiverRegistrySheet() {
         caregiverRegistrySheetModel = new DefaultTableModel(0, 3);
         Object[] columnNames = {"Caregiver", "Phone", "Email"};
@@ -81,6 +83,10 @@ public class CaregiverSelectionWindow extends Window {
         panel0.add(scrollPane, BorderLayout.CENTER);
     }
 
+    // REQUIRES: childName must be a non-empty string, and match an existing child within the child registry
+    // MODIFIES: this, Child, AttendanceSheet
+    // EFFECTS: Places button to select primary caregiver for child: creates the child using the selected caregiver,
+    //          updates, adds the child to the notCheckedIn list, and updates the notCheckedIn attendance sheet.
     public void placeSelectCaregiverWindowButtons(String childName) {
         JButton b1 = new JButton(ButtonNames.SELECT_CAREGIVER.getValue());
 

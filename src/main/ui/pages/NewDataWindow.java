@@ -6,22 +6,24 @@ import ui.ButtonNames;
 import javax.swing.*;
 import java.awt.*;
 
+// Creates window that allows user to name new registry and attendance sheet
 public class NewDataWindow extends Window {
 
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 200;
+    private static final int WIDTH = 400;
+    private static final int HEIGHT = 200;
 
-    private JPanel panel0;
-    private GridBagConstraints grid0;
-    private JPanel fieldRow;
+    private final JPanel panel0;
+    private final GridBagConstraints grid0;
     private GridBagConstraints grid1;
 
-    private static final String INSTRUCTION_TEXT = "Name your new registry and attendance sheet.";
     private JLabel instruction;
+    private static final String INSTRUCTION_TEXT = "Name your new registry and attendance sheet.";
 
-    JTextField registryField;
-    JTextField attendanceSheetField;
+    private JTextField registryField;
+    private JTextField attendanceSheetField;
 
+    // REQUIRES: Argument must exist (!=null)
+    // EFFECTS: Constructs window that allows user to name new registry and attendance sheet
     public NewDataWindow(AttendanceUI controller) {
         super("New Registry and Attendance Sheet", controller);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,6 +42,8 @@ public class NewDataWindow extends Window {
         pack();
     }
 
+    // MODIFIES: this
+    // EFFECTS: Places instruction to enter new name for registry and attendance sheet.
     private void placeInstruction() {
         instruction = new JLabel(INSTRUCTION_TEXT, JLabel.CENTER);
         instruction.setVerticalAlignment(JLabel.CENTER);
@@ -49,6 +53,9 @@ public class NewDataWindow extends Window {
         panel0.add(instruction, grid0);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Places fields to enter new names for registry and attendance sheet.
+    @SuppressWarnings("methodlength")
     public void placeFields() {
         JPanel fieldRow = new JPanel();
         fieldRow.setLayout(new GridBagLayout());
@@ -84,6 +91,9 @@ public class NewDataWindow extends Window {
         panel0.add(fieldRow, grid0);
     }
 
+    // MODIFIES: this, AttendanceSheet, Registry, HomeWindow
+    // EFFECTS: Places button to submit names for new attendance sheet and registry. Creates new attendance sheet and
+    //          registry using given data from fields, and opens a new HomeWindow.
     public void placeButton() {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 

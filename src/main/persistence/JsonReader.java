@@ -46,8 +46,8 @@ public class JsonReader {
         String registryName = registryJsonObject.getString("name");
         Registry registry = new Registry(registryName);
         addPeopleToRegistry(registry, registryJsonObject);
-        EventLog.getInstance().logEvent(new Event(registry.getName() + " registry data loaded from "
-                + registrySource));
+//        EventLog.getInstance().logEvent(new Event(registry.getName() + " registry data loaded from "
+//                + registrySource));
         return registry;
     }
 
@@ -60,15 +60,15 @@ public class JsonReader {
             JSONObject nextCaregiver = (JSONObject) json;
             addCaregiverToRegistry(registry, nextCaregiver);
         }
-        EventLog.getInstance().logEvent(new Event(registry.getName() + " caregiver registry data loaded from "
-                + registrySource));
+//        EventLog.getInstance().logEvent(new Event(registry.getName() + " caregiver registry data loaded from "
+//                + registrySource));
         JSONArray jsonArrayChildRegistry = registryJsonObject.getJSONArray("childRegistry");
         for (Object json : jsonArrayChildRegistry) {
             JSONObject nextChild = (JSONObject) json;
             addChildToRegistry(registry, nextChild);
         }
-        EventLog.getInstance().logEvent(new Event(registry.getName() + " child registry data loaded from "
-                + registrySource));
+//        EventLog.getInstance().logEvent(new Event(registry.getName() + " child registry data loaded from "
+//                + registrySource));
     }
 
     // MODIFIES: Registry, Caregiver
@@ -164,8 +164,8 @@ public class JsonReader {
         String attendanceName = attendanceJsonObject.getString("name");
         AttendanceSheet attendanceSheet = new AttendanceSheet(attendanceName);
         addChildrenFromRegistryToAttendanceSheet(attendanceSheet, registry, attendanceJsonObject);
-        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
-                + " attendance sheet data loaded from " + attendanceSource));
+//        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
+//                + " attendance sheet data loaded from " + attendanceSource));
         return attendanceSheet;
     }
 

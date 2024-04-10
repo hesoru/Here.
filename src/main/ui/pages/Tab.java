@@ -5,17 +5,19 @@ import ui.AttendanceUI;
 import javax.swing.*;
 import java.awt.*;
 
-// abstract class that constructs tabs with an AttendanceUI controller
+// Abstract class that constructs tabs with an AttendanceUI controller
 public abstract class Tab extends JPanel {
 
     private final AttendanceUI controller;
 
-    // EFFECTS: constructs tab with an AttendanceUI controller
+    // REQUIRES: controller exists (!=null)
+    // EFFECTS: Constructs tab with an AttendanceUI controller
     public Tab(AttendanceUI controller) {
         this.controller = controller;
     }
 
-    // EFFECTS: creates and returns row with button included
+    // MODIFIES: this
+    // EFFECTS: Creates and returns row with button included
     public JPanel formatButtonRow(JButton b) {
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout());

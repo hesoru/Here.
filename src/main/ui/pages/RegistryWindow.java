@@ -3,19 +3,22 @@ package ui.pages;
 import ui.AttendanceUI;
 
 import javax.swing.*;
-import java.awt.*;
 
+// Creates registry window with tabbed interface: displays child registry, caregiver registry, and settings.
 public class RegistryWindow extends Window {
 
-    private JTabbedPane sidebar;
+    private final JTabbedPane sidebar;
 
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 525;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 525;
 
-    public static final int CHILD_REGISTRY_TAB_INDEX = 0;
-    public static final int CAREGIVER_REGISTRY_TAB_INDEX = 1;
-    public static final int SETTINGS_TAB_INDEX = 2;
+    private static final int CHILD_REGISTRY_TAB_INDEX = 0;
+    private static final int CAREGIVER_REGISTRY_TAB_INDEX = 1;
+    private static final int SETTINGS_TAB_INDEX = 2;
 
+    // REQUIRES: Arguments must exist (!=null)
+    // EFFECTS: Constructs registry window with tabbed interface: displays child registry, caregiver registry, and
+    //          settings.
     public RegistryWindow(AttendanceUI controller) {
         super("Registry", controller);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -28,8 +31,8 @@ public class RegistryWindow extends Window {
         setVisible(true);
     }
 
-    //MODIFIES: this
-    //EFFECTS: adds home tab, settings tab and report tab to this UI
+    // MODIFIES: this
+    // EFFECTS: Adds tabs to registry window: child registry, caregiver registry, and settings.
     private void loadTabs() {
         JPanel childRegistryTab = new RegistryTab(controller, "Child Registry");
         JPanel caregiverRegistryTab = new RegistryTab(controller, "Caregiver Registry");

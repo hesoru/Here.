@@ -7,11 +7,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+// Creates window that allows user to add child or caregiver to registry.
 public class AddNewPersonWindow extends Window {
 
-    private JPanel panel0;
+    private final JPanel panel0;
 
-    private GridBagConstraints grid0;
+    private final GridBagConstraints grid0;
     private GridBagConstraints grid1;
 
     private int width;
@@ -27,10 +28,13 @@ public class AddNewPersonWindow extends Window {
     private JTextField caregiverPhoneField;
     private JTextField caregiverEmailField;
 
-    private DefaultTableModel caregiverRegistrySheetModel;
-    DefaultTableModel childRegistrySheetModel;
+    private final DefaultTableModel caregiverRegistrySheetModel;
+    private final DefaultTableModel childRegistrySheetModel;
 
-    public AddNewPersonWindow(DefaultTableModel childRegistrySheetModel, DefaultTableModel caregiverRegistrySheetModel, AttendanceUI controller, String personType) {
+    // REQUIRES: Arguments must exist, and personType must be either "Child" or "Caregiver" only.
+    // EFFECTS: Constructs a new window that allows user to add child or caregiver to registry.
+    public AddNewPersonWindow(DefaultTableModel childRegistrySheetModel, DefaultTableModel caregiverRegistrySheetModel,
+                              AttendanceUI controller, String personType) {
         super("Add New Person to Registry", controller);
         this.childRegistrySheetModel = childRegistrySheetModel;
         this.caregiverRegistrySheetModel = caregiverRegistrySheetModel;
@@ -41,6 +45,14 @@ public class AddNewPersonWindow extends Window {
         grid0 = new GridBagConstraints();
         grid0.fill = GridBagConstraints.HORIZONTAL;
 
+        placeContentByPerson(personType);
+    }
+
+    // REQUIRES: personType must be either "Child" or "Caregiver" only.
+    // MODIFIES: this
+    // EFFECTS: Sets window size, places instruction, places fields, and places buttons in window--depending on
+    //          person type.
+    public void placeContentByPerson(String personType) {
         if (personType.equals("Child")) {
             width = 400;
             height = 200;
@@ -57,19 +69,13 @@ public class AddNewPersonWindow extends Window {
             placeAddCaregiverWindowFields();
             placeAddCaregiverWindowButtons();
         }
-//        if (personType.equals("Authorized Caregiver")) {
-//            width = 500;
-//            height = 250;
-//            setSize(width, height);
-//            placeInstruction("Authorized Caregiver");
-//            placeAddCaregiverWindowFields();
-//            placeAddAuthorizedCaregiverWindowButtons();
-//        }
-
         add(panel0);
     }
 
-    private void placeInstruction(String personType) {
+    // REQUIRES: personType must be either "Child" or "Caregiver" only.
+    // MODIFIES: this
+    // EFFECTS: Places instruction in window--depending on person type.
+    public void placeInstruction(String personType) {
         instruction = new JLabel();
         instruction.setHorizontalAlignment(JLabel.CENTER);
         instruction.setVerticalAlignment(JLabel.CENTER);
@@ -90,6 +96,8 @@ public class AddNewPersonWindow extends Window {
         panel0.add(instruction, grid0);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Places fields in window for adding child to registry.
     public void placeAddChildWindowFields() {
         JPanel fieldRow = new JPanel(new GridBagLayout());
         grid1 = new GridBagConstraints();
@@ -112,6 +120,8 @@ public class AddNewPersonWindow extends Window {
         panel0.add(fieldRow, grid0);
     }
 
+    // MODIFIES: this, CaregiverSelectionWindow, Child
+    // EFFECTS: Places buttons in window for adding child to registry.
     public void placeAddChildWindowButtons() {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 
@@ -127,6 +137,9 @@ public class AddNewPersonWindow extends Window {
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: Places fields in window for adding caregiver to registry.
+    @SuppressWarnings("methodlength")
     public void placeAddCaregiverWindowFields() {
         JPanel fieldRow = new JPanel(new GridBagLayout());
         grid1 = new GridBagConstraints();
@@ -173,6 +186,8 @@ public class AddNewPersonWindow extends Window {
         panel0.add(fieldRow, grid0);
     }
 
+    // MODIFIES: this, Caregiver
+    // EFFECTS: Places buttons in window for adding caregiver to registry.
     public void placeAddCaregiverWindowButtons() {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 
@@ -199,32 +214,5 @@ public class AddNewPersonWindow extends Window {
             instruction.setText(caregiverName + " added to caregiver registry.");
         });
     }
-
-//    public void placeAddAuthorizedCaregiverWindowButtons() {
-//        JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
-//
-//        JPanel buttonRow = new JPanel(new FlowLayout());
-//        buttonRow.setSize(width, height / 3);
-//        buttonRow.add(b1);
-//        grid0.gridy = 4;
-//        panel0.add(buttonRow, grid0);
-//
-//        b1.addActionListener(e -> {
-//            String caregiverName = caregiverNameField.getText();
-//            Long caregiverPhone = Long.valueOf(caregiverPhoneField.getText());
-//            String caregiverEmail = caregiverEmailField.getText();
-//
-//            getController().getRegistry().addNewCaregiver(caregiverName, caregiverPhone, caregiverEmail);
-//
-//            Object[] caregiverData = new Object[3];
-//            caregiverData[0] = caregiverName;
-//            caregiverData[1] = caregiverPhone;
-//            caregiverData[2] = caregiverEmail;
-//            authorizedCaregiverSheetModel.addRow(caregiverData);
-//            authorizedCaregiverSheetModel.fireTableDataChanged();
-//
-//            instruction.setText(caregiverName + " added to caregiver registry.");
-//        });
-//    }
 
 }

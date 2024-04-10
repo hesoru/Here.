@@ -23,7 +23,7 @@ public class AttendanceSheet implements Writable {
         this.notCheckedIn = new LinkedList<>();
         this.checkedIn = new LinkedList<>();
         this.checkedOut = new LinkedList<>();
-        EventLog.getInstance().logEvent(new Event("New attendance sheet created: " + this.name));
+//        EventLog.getInstance().logEvent(new Event("New attendance sheet created: " + this.name));
     }
 
     // REQUIRES: child exists (!null).
@@ -31,7 +31,7 @@ public class AttendanceSheet implements Writable {
     // EFFECTS: Adds given child to notCheckedIn list.
     public void notCheckedIn(Child child) {
         notCheckedIn.add(child);
-        EventLog.getInstance().logEvent(new Event(child.getFullName() + " is not yet checked in."));
+//        EventLog.getInstance().logEvent(new Event(child.getFullName() + " is not yet checked in."));
     }
 
     // REQUIRES: child exists (!null).
@@ -45,7 +45,8 @@ public class AttendanceSheet implements Writable {
                 notCheckedIn.remove(c);
                 checkedIn.add(c);
                 c.setCheckInTime(LocalTime.now());
-                EventLog.getInstance().logEvent(new Event(child.getFullName() + " checked in at " + child.getCheckInTime()));
+//                EventLog.getInstance().logEvent(new Event(child.getFullName()
+//                        + " checked in at " + child.getCheckInTime()));
                 return true;
             }
         }
@@ -100,10 +101,10 @@ public class AttendanceSheet implements Writable {
         } else if (isAuthorizedToPickUp(caregiver, child) && childIsCheckedIn(child)) {
             checkedIn.remove(child);
             checkedOut.add(child);
-            child.setCheckOutCaregiver(caregiver);
+//            child.setCheckOutCaregiver(caregiver);
             child.setCheckOutTime(LocalTime.now());
-            EventLog.getInstance().logEvent(new Event(child.getFullName() + " checked out at " + child.getCheckOutTime()
-                    + " by " + child.getCheckOutCaregiver().getFullName()));
+//            EventLog.getInstance().logEvent(new Event(child.getFullName() + " checked out at "
+//                    + child.getCheckOutTime() + " by " + child.getCheckOutCaregiver().getFullName()));
             return "child checked out";
         } else {
             if (!childIsCheckedIn(child) && !isAuthorizedToPickUp(caregiver, child)) {
@@ -128,7 +129,7 @@ public class AttendanceSheet implements Writable {
         checkedIn.clear();
         checkedOut.clear();
         notCheckedIn.addAll(childRegistry);
-        EventLog.getInstance().logEvent(new Event("Attendance sheet reset: all children are not yet checked in."));
+//        EventLog.getInstance().logEvent(new Event("Attendance sheet reset: all children are not yet checked in."));
         return true;
     }
 
@@ -139,7 +140,7 @@ public class AttendanceSheet implements Writable {
         json.put("notCheckedIn", notCheckedInToJson());
         json.put("checkedIn", checkedInToJson());
         json.put("checkedOut", checkedOutToJson());
-        EventLog.getInstance().logEvent(new Event(this.name + " attendance sheet data written to JSON file."));
+//        EventLog.getInstance().logEvent(new Event(this.name + " attendance sheet data written to JSON file."));
         return json;
     }
 

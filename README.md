@@ -39,8 +39,21 @@ As childcare staff, I want to be prompted and given the option to:
 
 ## Instructions for Grader
 
-- You can generate the first required action related to the user story "adding multiple Xs to a Y" by...
-- You can generate the second required action related to the user story "adding multiple Xs to a Y" by...
-- You can locate my visual component by...
-- You can save the state of my application by...
-- You can reload the state of my application by...
+- The panel displaying "multiple Xs added to a Y" is implemented with the feature to:
+  - View caregivers added to the caregiver registry: display caregiver name, phone, and email
+  - View children added to the child registry: display child name, primary caregiver name, caregiver phone, and caregiver email
+  - View children on the attendance sheet that are not yet checked in, checked in, and checked out: 
+    - Not yet checked in: display child name, primary caregiver name, caregiver phone, and caregiver email
+    - Checked in: display child name and check-in time
+    - Checked out: display child name, check-out time, and caregiver picking up
+  
+- You can generate the 2+ required actions related to the user story "adding multiple Xs to a Y" with the feature to:
+  - Add/remove caregivers from the caregiver registry (2 buttons)
+  - Add/remove children from the child registry (2 buttons)
+  - Check children in and record the time of check-in (button)
+  - Check children out, record the time of check-out (button), and select the caregiver checking out the child (selection window)
+  - Reset the attendance sheet, so all children are not yet checked in (button)
+  - Sort any columns by ascending/descending alphanumeric order in the registry or attendance sheet (clicking on the column header)
+- You can locate my visual component by going into the home window (where selecting whether to open the registry and/or attendance sheet)
+- You can save the state of my application by clicking the save button on the home window, in the settings tab of the registry window, or the settings tab of the attendance sheet window
+- You can reload the state of my application by clicking "Load app data from file" in the choose data window

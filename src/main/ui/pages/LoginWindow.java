@@ -6,6 +6,7 @@ import ui.ButtonNames;
 import javax.swing.*;
 import java.awt.*;
 
+// Creates password-protected login window for attendance application
 public class LoginWindow extends Window {
 
     public static final int WIDTH = 300;
@@ -15,12 +16,13 @@ public class LoginWindow extends Window {
     private static final String INSTRUCTION_TEXT = "Login";
     private JLabel instruction;
 
-    private JPanel panel0;
-    private GridBagConstraints grid0;
+    private final JPanel panel0;
+    private final GridBagConstraints grid0;
 
-    private JLabel label;
     private JTextField passwordField;
 
+    // REQUIRES: argument must exist (!=null)
+    // EFFECTS: Constructs password-protected login window
     public LoginWindow(AttendanceUI controller) {
         super("Login", controller);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,6 +41,8 @@ public class LoginWindow extends Window {
         pack();
     }
 
+    // MODIFIES: this
+    // EFFECTS: Places instruction to login.
     private void placeInstruction() {
         instruction = new JLabel(INSTRUCTION_TEXT, JLabel.CENTER);
         instruction.setVerticalAlignment(JLabel.CENTER);
@@ -48,12 +52,14 @@ public class LoginWindow extends Window {
         panel0.add(instruction, grid0);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Places password field.
     public void placeField() {
         JPanel fieldRow = new JPanel();
         fieldRow.setLayout(new FlowLayout());
         fieldRow.setSize(WIDTH, HEIGHT / 3);
 
-        label = new JLabel("Password", JLabel.RIGHT);
+        JLabel label = new JLabel("Password", JLabel.RIGHT);
         label.setHorizontalAlignment(JLabel.CENTER);
 
         passwordField = new JPasswordField(20);
@@ -64,6 +70,9 @@ public class LoginWindow extends Window {
         panel0.add(fieldRow, grid0);
     }
 
+    // MODIFIES: this, ChooseDataWindow
+    // EFFECTS: Places button to submit password. If password is correct, opens new ChooseDataWindow. If password is
+    //          incorrect, changes instruction to tell user that password is incorrect.
     public void placeButton() {
         JButton b1 = new JButton(ButtonNames.SUBMIT.getValue());
 

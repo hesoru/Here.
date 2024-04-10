@@ -31,7 +31,11 @@ public class JsonWriter {
         JSONObject attendanceJson = attendanceSheet.toJson();
         JSONObject registryJson = registry.toJson();
         attendanceWriter.print(attendanceJson.toString(TAB));
+//        EventLog.getInstance().logEvent(new Event(registry.getName() + " registry data written to file at "
+//                + registryDestination));
         registryWriter.print(registryJson.toString(TAB));
+//        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
+//                + " attendance sheet data written to file at " + attendanceDestination));
 
         attendanceWriter.close();
         registryWriter.close();

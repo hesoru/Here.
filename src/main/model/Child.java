@@ -28,8 +28,8 @@ public class Child implements Writable {
         this.checkInTime = null;
         this.checkOutTime = null;
         this.checkOutCaregiver = null;
-        EventLog.getInstance().logEvent(new Event("New child created: " + this.fullName
-                + ". Primary caregiver is " + this.primaryCaregiver + "."));
+//        EventLog.getInstance().logEvent(new Event("New child created: " + this.fullName
+//                + ". Primary caregiver is " + this.primaryCaregiver + "."));
     }
 
     @Override
