@@ -152,14 +152,9 @@ public class JsonReader {
     // EFFECTS: Reads attendance sheet from file and returns it;
     //          throws IOException if an error occurs reading data from file.
     public AttendanceSheet readAttendance(Registry registry) throws IOException {
-        try {
-            String attendanceJsonData = readFile(attendanceSource);
-            JSONObject attendanceJsonObject = new JSONObject(attendanceJsonData);
-            return parseAttendanceSheet(attendanceJsonObject, registry);
-        } catch (IOException e) {
-            EventLog.getInstance().logEvent(new Event("Unable to read from file: " + attendanceSource));
-        }
-        return null;
+        String attendanceJsonData = readFile(attendanceSource);
+        JSONObject attendanceJsonObject = new JSONObject(attendanceJsonData);
+        return parseAttendanceSheet(attendanceJsonObject, registry);
     }
 
     // EFFECTS: Parses attendance sheet from JSON object and returns it.
