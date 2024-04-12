@@ -47,6 +47,7 @@ public class EventTest {
         assertFalse(e1.equals(d1));
         assertFalse(e1.equals(e2));
         assertFalse(e1.equals(e3));
+        assertFalse(e1.equals(null));
 
         assertTrue(e1.equals(e1));
         assertTrue(e2.equals(e3));

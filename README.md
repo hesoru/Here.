@@ -60,32 +60,32 @@ As childcare staff, I want to be prompted and given the option to:
 
 ### Phase 4: Sample Event Log (Task 2)
 
-Fri Apr 12 02:10:54 PDT 2024
-Registry created: CPSC 210
-Fri Apr 12 02:10:54 PDT 2024
-CPSC 210 registry data loaded into registry from ./data/registry.json
-Fri Apr 12 02:10:54 PDT 2024
-Attendance sheet created: Lab
-Fri Apr 12 02:10:54 PDT 2024
-Lab attendance sheet data loaded into attendance sheet from ./data/attendance_sheet.json
-Fri Apr 12 02:11:40 PDT 2024
-Bob Singh added to caregiver registry.
-Fri Apr 12 02:12:08 PDT 2024
-Brian Singh added to child registry.
-Fri Apr 12 02:12:08 PDT 2024
-Brian Singh added to children that are not yet checked in.
-Fri Apr 12 02:12:29 PDT 2024
-CPSC 210 registry data written to file: ./data/registry.json
-Fri Apr 12 02:12:29 PDT 2024
-Lab attendance sheet data written to file: ./data/attendance_sheet.json
-Fri Apr 12 02:12:56 PDT 2024
-Helen Sokolov checked in at 02:12:56.930695400
-Fri Apr 12 02:13:05 PDT 2024
-Emily Black checked out at 02:13:05.417906 by Jane Black
-Fri Apr 12 02:13:10 PDT 2024
-CPSC 210 registry data written to file: ./data/registry.json
-Fri Apr 12 02:13:10 PDT 2024
-Lab attendance sheet data written to file: ./data/attendance_sheet.json
+- Fri Apr 12 02:10:54 PDT 2024 
+  - Registry created: CPSC 210 
+- Fri Apr 12 02:10:54 PDT 2024 
+  - CPSC 210 registry data loaded into registry from ./data/registry.json 
+- Fri Apr 12 02:10:54 PDT 2024 
+  - Attendance sheet created: Lab 
+- Fri Apr 12 02:10:54 PDT 2024 
+  - Lab attendance sheet data loaded into attendance sheet from ./data/attendance_sheet.json 
+- Fri Apr 12 02:11:40 PDT 2024 
+  - Bob Singh added to caregiver registry. 
+- Fri Apr 12 02:12:08 PDT 2024 
+  - Brian Singh added to child registry. 
+- Fri Apr 12 02:12:08 PDT 2024 
+  - Brian Singh added to children that are not yet checked in. 
+- Fri Apr 12 02:12:29 PDT 2024 
+  - CPSC 210 registry data written to file: ./data/registry.json 
+- Fri Apr 12 02:12:29 PDT 2024 
+  - Lab attendance sheet data written to file: ./data/attendance_sheet.json 
+- Fri Apr 12 02:12:56 PDT 2024 
+  - Helen Sokolov checked in at 02:12:56.930695400 
+- Fri Apr 12 02:13:05 PDT 2024 
+  - Emily Black checked out at 02:13:05.417906 by Jane Black 
+- Fri Apr 12 02:13:10 PDT 2024 
+  - CPSC 210 registry data written to file: ./data/registry.json 
+- Fri Apr 12 02:13:10 PDT 2024 
+  - Lab attendance sheet data written to file: ./data/attendance_sheet.json
 
 ### Phase 4: Improvements (Task 3)
 

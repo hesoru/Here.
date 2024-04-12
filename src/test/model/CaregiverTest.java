@@ -47,6 +47,7 @@ public class CaregiverTest {
         assertFalse(cg1.equals(cg3));
         assertFalse(cg1.equals(cg1DiffNum));
         assertFalse(cg1.equals(cg1DiffEmail));
+        assertFalse(cg1.equals(null));
 
         assertTrue(cg1.equals(cg4));
         assertTrue(cg1.equals(cg1));
