@@ -11,7 +11,7 @@ import persistence.Writable;
 public class Child implements Writable {
 
     private final String fullName;
-    private Caregiver primaryCaregiver;
+    private final Caregiver primaryCaregiver;
     private final List<Caregiver> authorizedToPickUp;
     private LocalTime checkInTime;
     private LocalTime checkOutTime;
@@ -40,7 +40,7 @@ public class Child implements Writable {
         json.put("authorizedToPickUp", authorizedToPickUpToJson());
         json.put("checkInTime", checkInTime);
         json.put("checkOutTime", checkOutTime);
-        json.put("checkOutCaregiver", checkOutTime);
+        json.put("checkOutCaregiver", checkOutCaregiver);
         return json;
     }
 
@@ -58,6 +58,24 @@ public class Child implements Writable {
     // EFFECTS: Adds caregiver to authorizedToPickUp list of child.
     public void addAuthorizedToPickUp(Caregiver authorizedToPickUp) {
         this.authorizedToPickUp.add(authorizedToPickUp);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets checkOutCaregiver to the given caregiver
+    public void setCheckOutCaregiver(Caregiver caregiver) {
+        this.checkOutCaregiver = caregiver;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets checkInTime
+    public void setCheckInTime(LocalTime checkInTime) {
+        this.checkInTime = checkInTime;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets checkOutTime
+    public void setCheckOutTime(LocalTime checkOutTime) {
+        this.checkOutTime = checkOutTime;
     }
 
     public String getFullName() {
@@ -82,18 +100,6 @@ public class Child implements Writable {
 
     public Caregiver getCheckOutCaregiver() {
         return checkOutCaregiver;
-    }
-
-    public void setCheckInTime(LocalTime checkInTime) {
-        this.checkInTime = checkInTime;
-    }
-
-    public void setCheckOutTime(LocalTime checkOutTime) {
-        this.checkOutTime = checkOutTime;
-    }
-
-    public void setPrimaryCaregiver(Caregiver primaryCaregiver) {
-        this.primaryCaregiver = primaryCaregiver;
     }
 
 }

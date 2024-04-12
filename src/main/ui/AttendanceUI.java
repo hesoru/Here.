@@ -92,7 +92,6 @@ public class AttendanceUI extends JFrame {
     //          and adds all children in the childRegistry to the notCheckedIn list. Otherwise, returns the user to the
     //          options. Prints whether the attendance sheet was reset or the method is returning the user to the
     //          options.
-    // TODO: reset check-in and check-out time
     public void resetAttendance() {
         attendanceSheet.reset("yes", registry.getChildRegistry());
     }

@@ -76,6 +76,18 @@ class ChildTest {
     }
 
     @Test
+    public void testSetCheckOutCaregiver() {
+        c1.setCheckOutCaregiver(cg1);
+        assertEquals(cg1, c1.getCheckOutCaregiver());
+
+        c2.setCheckOutCaregiver(cg3);
+        assertEquals(cg3, c2.getCheckOutCaregiver());
+
+        c3.setCheckOutCaregiver(cg2);
+        assertEquals(cg2, c3.getCheckOutCaregiver());
+    }
+
+    @Test
     public void testSetCheckInTime() {
         LocalTime t1 = LocalTime.now();
 

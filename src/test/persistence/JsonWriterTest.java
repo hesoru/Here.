@@ -69,12 +69,17 @@ public class JsonWriterTest extends JsonTest {
                         "alovelace@gmail.com");
                 registry.addNewCaregiver("John Smith", 6043331234L,
                         "jsmith@yahoo.com");
+                registry.addNewCaregiver("Adam Lovelace", 7788225678L,
+                        "adaml@gmail.com");
                 Caregiver caregiver1 = registry.selectCaregiver("Ada Lovelace");
                 Caregiver caregiver2 = registry.selectCaregiver("John Smith");
+                Caregiver caregiver3 = registry.selectCaregiver("Adam Lovelace");
 
                 Child child1 = new Child("David Lovelace", caregiver1);
                 Child child2 = new Child("Jane Lovelace", caregiver1);
                 Child child3 = new Child("Emily Smith", caregiver2);
+                child1.addAuthorizedToPickUp(caregiver3);
+                child2.addAuthorizedToPickUp(caregiver3);
                 registry.addChildToRegistry(child1);
                 registry.addChildToRegistry(child2);
                 registry.addChildToRegistry(child3);
@@ -82,12 +87,12 @@ public class JsonWriterTest extends JsonTest {
                 attendanceSheet.addNotCheckedIn(child2);
                 attendanceSheet.addNotCheckedIn(child3);
                 assertEquals(3, registry.getChildRegistry().size());
-                assertEquals(2, registry.getCaregiverRegistry().size());
+                assertEquals(3, registry.getCaregiverRegistry().size());
                 assertEquals(3, attendanceSheet.getNotCheckedIn().size());
 
                 attendanceSheet.checkIn(child2);
                 attendanceSheet.checkIn(child3);
-                attendanceSheet.checkOut(child3, caregiver2);
+                attendanceSheet.checkOut(child2, caregiver3);
                 assertEquals(1, attendanceSheet.getNotCheckedIn().size());
                 assertEquals(1, attendanceSheet.getCheckedIn().size());
                 assertEquals(1, attendanceSheet.getCheckedOut().size());
@@ -115,17 +120,19 @@ public class JsonWriterTest extends JsonTest {
             checkChild("David Lovelace", caregiver1, child1.getAuthorizedToPickUp(), child1.getCheckInTime(),
                     child1.getCheckOutTime(), attendanceSheet.getNotCheckedIn().get(0));
             checkChild("Jane Lovelace", caregiver1, child2.getAuthorizedToPickUp(), child2.getCheckInTime(),
-                    child2.getCheckOutTime(), attendanceSheet.getCheckedIn().get(0));
+                    child2.getCheckOutTime(), attendanceSheet.getCheckedOut().get(0));
             checkChild("Emily Smith", caregiver2, child3.getAuthorizedToPickUp(), child3.getCheckInTime(),
-                    child3.getCheckOutTime(), attendanceSheet.getCheckedOut().get(0));
+                    child3.getCheckOutTime(), attendanceSheet.getCheckedIn().get(0));
 
             checkRegistry("CPSC 210", registry.getChildRegistry(), registry.getCaregiverRegistry(), registry);
             assertEquals(3, registry.getChildRegistry().size());
-            assertEquals(2, registry.getCaregiverRegistry().size());
+            assertEquals(3, registry.getCaregiverRegistry().size());
             checkCaregiver("Ada Lovelace", 7788221234L, "alovelace@gmail.com",
                     registry.getCaregiverRegistry().get(0));
             checkCaregiver("John Smith", 6043331234L, "jsmith@yahoo.com",
                     registry.getCaregiverRegistry().get(1));
+            checkCaregiver("Adam Lovelace", 7788225678L, "adaml@gmail.com",
+                    registry.getCaregiverRegistry().get(2));
             checkChild("David Lovelace", caregiver1, child1.getAuthorizedToPickUp(), child1.getCheckInTime(),
                     child1.getCheckOutTime(), registry.getChildRegistry().get(0));
             checkChild("Jane Lovelace", caregiver1, child2.getAuthorizedToPickUp(), child2.getCheckInTime(),

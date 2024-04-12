@@ -3,7 +3,9 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
 import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +14,7 @@ public class AttendanceSheetTest {
     private AttendanceSheet attendanceSheetEmpty;
     private AttendanceSheet attendanceSheet;
 
-    private LinkedList emptyLinkedList;
+    private List emptyLinkedList;
 
     private Registry registry;
 
@@ -89,19 +91,19 @@ public class AttendanceSheetTest {
         assertEquals(c2, attendanceSheet.getNotCheckedIn().get(1));
         assertEquals(c3, attendanceSheet.getNotCheckedIn().get(2));
 
-        assertTrue(attendanceSheet.checkIn(c1));
+        attendanceSheet.checkIn(c1);
         assertEquals(c1, attendanceSheet.getCheckedIn().get(0));
         assertEquals(c2, attendanceSheet.getNotCheckedIn().get(0));
         assertEquals(c3, attendanceSheet.getNotCheckedIn().get(1));
         assertEquals(2, attendanceSheet.getNotCheckedIn().size());
 
-        assertTrue(attendanceSheet.checkIn(c2));
+        attendanceSheet.checkIn(c2);
         assertEquals(c1, attendanceSheet.getCheckedIn().get(0));
         assertEquals(c2, attendanceSheet.getCheckedIn().get(1));
         assertEquals(c3, attendanceSheet.getNotCheckedIn().get(0));
         assertEquals(1, attendanceSheet.getNotCheckedIn().size());
 
-        assertTrue(attendanceSheet.checkIn(c3));
+        attendanceSheet.checkIn(c3);
         assertEquals(c1, attendanceSheet.getCheckedIn().get(0));
         assertEquals(c2, attendanceSheet.getCheckedIn().get(1));
         assertEquals(c3, attendanceSheet.getCheckedIn().get(2));
@@ -111,19 +113,23 @@ public class AttendanceSheetTest {
 
     @Test
     public void testCheckInChildFalse() {
-        assertFalse(attendanceSheetEmpty.checkIn(c1));
-        assertFalse(attendanceSheetEmpty.checkIn(c2));
-        assertFalse(attendanceSheetEmpty.checkIn(c3));
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
+        assertEquals(3, attendanceSheet.getCheckedIn().size());
+        assertEquals(c1, attendanceSheet.getCheckedIn().get(0));
+        assertEquals(c2, attendanceSheet.getCheckedIn().get(1));
+        assertEquals(c3, attendanceSheet.getCheckedIn().get(2));
         assertEquals(emptyLinkedList, attendanceSheetEmpty.getNotCheckedIn());
-        assertEquals(emptyLinkedList, attendanceSheetEmpty.getCheckedIn());
         assertEquals(emptyLinkedList, attendanceSheetEmpty.getCheckedOut());
 
         assertFalse(attendanceSheet.checkIn(c4));
         assertFalse(attendanceSheet.checkIn(c5));
-        assertEquals(c1, attendanceSheet.getNotCheckedIn().get(0));
-        assertEquals(c2, attendanceSheet.getNotCheckedIn().get(1));
-        assertEquals(c3, attendanceSheet.getNotCheckedIn().get(2));
-        assertEquals(emptyLinkedList, attendanceSheet.getCheckedIn());
+        assertEquals(3, attendanceSheet.getCheckedIn().size());
+        assertEquals(c1, attendanceSheet.getCheckedIn().get(0));
+        assertEquals(c2, attendanceSheet.getCheckedIn().get(1));
+        assertEquals(c3, attendanceSheet.getCheckedIn().get(2));
+        assertEquals(emptyLinkedList, attendanceSheet.getNotCheckedIn());
         assertEquals(emptyLinkedList, attendanceSheet.getCheckedOut());
     }
 
@@ -149,9 +155,9 @@ public class AttendanceSheetTest {
 
     @Test
     public void testChildIsCheckedInTrue() {
-        assertTrue(attendanceSheet.checkIn(c1));
-        assertTrue(attendanceSheet.checkIn(c2));
-        assertTrue(attendanceSheet.checkIn(c3));
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
 
         assertTrue(attendanceSheet.childIsCheckedIn(c1));
         assertTrue(attendanceSheet.childIsCheckedIn(c2));
@@ -181,9 +187,9 @@ public class AttendanceSheetTest {
 
     @Test
     public void testCheckOutCaregiverNull() {
-        assertTrue(attendanceSheet.checkIn(c1));
-        assertTrue(attendanceSheet.checkIn(c2));
-        assertTrue(attendanceSheet.checkIn(c3));
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
 
         assertEquals("caregiver null", attendanceSheet.checkOut(c1, null));
         assertEquals("caregiver null", attendanceSheet.checkOut(c2, null));
@@ -192,13 +198,17 @@ public class AttendanceSheetTest {
 
     @Test
     public void testCheckOutSuccess() {
-        assertTrue(attendanceSheet.checkIn(c1));
-        assertTrue(attendanceSheet.checkIn(c2));
-        assertTrue(attendanceSheet.checkIn(c3));
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
 
         assertEquals("child checked out", attendanceSheet.checkOut(c1, cg1));
         assertEquals("child checked out", attendanceSheet.checkOut(c2, cg3));
         assertEquals("child checked out", attendanceSheet.checkOut(c3, cg2));
+
+        assertEquals(cg1, c1.getCheckOutCaregiver());
+        assertEquals(cg3, c2.getCheckOutCaregiver());
+        assertEquals(cg2, c3.getCheckOutCaregiver());
     }
 
     @Test
@@ -211,9 +221,9 @@ public class AttendanceSheetTest {
 
     @Test
     public void testCheckOutCaregiverNotAuthorized() {
-        assertTrue(attendanceSheet.checkIn(c1));
-        assertTrue(attendanceSheet.checkIn(c2));
-        assertTrue(attendanceSheet.checkIn(c3));
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
 
         assertEquals("caregiver not authorized", attendanceSheet.checkOut(c1, cg2));
         assertEquals("caregiver not authorized", attendanceSheet.checkOut(c2, cg5));
@@ -229,9 +239,12 @@ public class AttendanceSheetTest {
 
     @Test
     public void testResetConfirmed() {
-        assertTrue(attendanceSheet.checkIn(c1));
-        assertTrue(attendanceSheet.checkIn(c2));
-        assertTrue(attendanceSheet.checkIn(c3));
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
+        attendanceSheet.checkOut(c1, cg1);
+        attendanceSheet.checkOut(c2, cg3);
+        attendanceSheet.checkOut(c3, cg2);
 
         attendanceSheet.reset("yes", registry.getChildRegistry());
 
@@ -253,10 +266,63 @@ public class AttendanceSheetTest {
     }
 
     @Test
+    public void testResetCheckInTimeReset() {
+        LocalTime t1 = LocalTime.now();
+        c1.setCheckInTime(t1);
+        c2.setCheckInTime(t1);
+        c3.setCheckInTime(t1);
+        assertEquals(t1, c1.getCheckInTime());
+        assertEquals(t1, c2.getCheckInTime());
+        assertEquals(t1, c3.getCheckInTime());
+
+        attendanceSheetEmpty.reset("yes", registry.getChildRegistry());
+
+        assertEquals(null, c1.getCheckInTime());
+        assertEquals(null, c2.getCheckInTime());
+        assertEquals(null, c3.getCheckInTime());
+    }
+
+    @Test
+    public void testResetCheckOutTimeReset() {
+        LocalTime t2 = LocalTime.now();
+        c1.setCheckOutTime(t2);
+        c2.setCheckOutTime(t2);
+        c3.setCheckOutTime(t2);
+        assertEquals(t2, c1.getCheckOutTime());
+        assertEquals(t2, c2.getCheckOutTime());
+        assertEquals(t2, c3.getCheckOutTime());
+
+        attendanceSheetEmpty.reset("yes", registry.getChildRegistry());
+
+        assertEquals(null, c1.getCheckOutTime());
+        assertEquals(null, c2.getCheckOutTime());
+        assertEquals(null, c3.getCheckOutTime());
+    }
+
+    @Test
+    public void testResetCheckOutCaregiverReset() {
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
+        attendanceSheet.checkOut(c1, cg1);
+        attendanceSheet.checkOut(c2, cg3);
+        attendanceSheet.checkOut(c3, cg2);
+        assertEquals(cg1, c1.getCheckOutCaregiver());
+        assertEquals(cg3, c2.getCheckOutCaregiver());
+        assertEquals(cg2, c3.getCheckOutCaregiver());
+
+        attendanceSheetEmpty.reset("yes", registry.getChildRegistry());
+
+        assertEquals(null, c1.getCheckOutCaregiver());
+        assertEquals(null, c2.getCheckOutCaregiver());
+        assertEquals(null, c3.getCheckOutCaregiver());
+    }
+
+    @Test
     public void testResetRejected() {
-        assertTrue(attendanceSheet.checkIn(c1));
-        assertTrue(attendanceSheet.checkIn(c2));
-        assertTrue(attendanceSheet.checkIn(c3));
+        attendanceSheet.checkIn(c1);
+        attendanceSheet.checkIn(c2);
+        attendanceSheet.checkIn(c3);
 
         attendanceSheet.reset("no", registry.getChildRegistry());
 

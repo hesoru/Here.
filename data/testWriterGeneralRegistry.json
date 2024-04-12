@@ -7,11 +7,18 @@
                 "phoneNum": 7788221234,
                 "email": "alovelace@gmail.com"
             },
-            "authorizedToPickUp": [{
-                "fullName": "Ada Lovelace",
-                "phoneNum": 7788221234,
-                "email": "alovelace@gmail.com"
-            }],
+            "authorizedToPickUp": [
+                {
+                    "fullName": "Ada Lovelace",
+                    "phoneNum": 7788221234,
+                    "email": "alovelace@gmail.com"
+                },
+                {
+                    "fullName": "Adam Lovelace",
+                    "phoneNum": 7788225678,
+                    "email": "adaml@gmail.com"
+                }
+            ],
             "fullName": "David Lovelace"
         },
         {
@@ -20,13 +27,22 @@
                 "phoneNum": 7788221234,
                 "email": "alovelace@gmail.com"
             },
-            "authorizedToPickUp": [{
-                "fullName": "Ada Lovelace",
-                "phoneNum": 7788221234,
-                "email": "alovelace@gmail.com"
-            }],
-            "checkInTime": "07:22:29.109855400",
-            "fullName": "Jane Lovelace"
+            "checkOutTime": "22:12:55.813641400",
+            "authorizedToPickUp": [
+                {
+                    "fullName": "Ada Lovelace",
+                    "phoneNum": 7788221234,
+                    "email": "alovelace@gmail.com"
+                },
+                {
+                    "fullName": "Adam Lovelace",
+                    "phoneNum": 7788225678,
+                    "email": "adaml@gmail.com"
+                }
+            ],
+            "checkInTime": "22:12:55.813641400",
+            "fullName": "Jane Lovelace",
+            "checkOutCaregiver": "model.Caregiver@231f98ef"
         },
         {
             "primaryCaregiver": {
@@ -34,15 +50,13 @@
                 "phoneNum": 6043331234,
                 "email": "jsmith@yahoo.com"
             },
-            "checkOutTime": "07:22:29.109855400",
             "authorizedToPickUp": [{
                 "fullName": "John Smith",
                 "phoneNum": 6043331234,
                 "email": "jsmith@yahoo.com"
             }],
-            "checkInTime": "07:22:29.109855400",
-            "fullName": "Emily Smith",
-            "checkOutCaregiver": "07:22:29.109855400"
+            "checkInTime": "22:12:55.813641400",
+            "fullName": "Emily Smith"
         }
     ],
     "caregiverRegistry": [
@@ -55,6 +69,11 @@
             "fullName": "John Smith",
             "phoneNum": 6043331234,
             "email": "jsmith@yahoo.com"
+        },
+        {
+            "fullName": "Adam Lovelace",
+            "phoneNum": 7788225678,
+            "email": "adaml@gmail.com"
         }
     ]
 }

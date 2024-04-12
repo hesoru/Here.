@@ -101,7 +101,7 @@ public class AttendanceSheet implements Writable {
         } else if (isAuthorizedToPickUp(caregiver, child) && childIsCheckedIn(child)) {
             checkedIn.remove(child);
             checkedOut.add(child);
-//            child.setCheckOutCaregiver(caregiver);
+            child.setCheckOutCaregiver(caregiver);
             child.setCheckOutTime(LocalTime.now());
 //            EventLog.getInstance().logEvent(new Event(child.getFullName() + " checked out at "
 //                    + child.getCheckOutTime() + " by " + child.getCheckOutCaregiver().getFullName()));
@@ -120,7 +120,8 @@ public class AttendanceSheet implements Writable {
     // MODIFIES: this
     // EFFECTS: If confirmChoice is "yes", the method resets the attendance sheet: clears the children in the
     //          notCheckedIn, checkedIn, and checkedOut list; adds all children in the given childRegistry to the
-    //          notCheckedIn list; and returns true. Otherwise, returns false.
+    //          notCheckedIn list; and returns true. Otherwise, returns false. Resets the checkInTime, checkOutTime,
+    //          and checkOutCaregiver for all children (=null).
     public boolean reset(String confirmChoice, List<Child> childRegistry) {
         if (!confirmChoice.equals("yes")) {
             return false;
@@ -129,6 +130,11 @@ public class AttendanceSheet implements Writable {
         checkedIn.clear();
         checkedOut.clear();
         notCheckedIn.addAll(childRegistry);
+        for (Child c : childRegistry) {
+            c.setCheckInTime(null);
+            c.setCheckOutTime(null);
+            c.setCheckOutCaregiver(null);
+        }
 //        EventLog.getInstance().logEvent(new Event("Attendance sheet reset: all children are not yet checked in."));
         return true;
     }

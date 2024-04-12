@@ -25,7 +25,7 @@ class JsonReaderTest extends JsonTest {
     }
 
     @Test
-    void testReaderEmptyWorkRoom() {
+    void testReaderEmptyFile() {
         JsonReader reader = new JsonReader("./data/testWriterEmptyAttendance.json",
                 "./data/testWriterEmptyRegistry.json");
         try {
@@ -46,7 +46,7 @@ class JsonReaderTest extends JsonTest {
     }
 
     @Test
-    void testReaderGeneralWorkRoom() {
+    void testReaderGeneralFile() {
         JsonReader reader = new JsonReader("./data/testWriterGeneralAttendance.json",
                 "./data/testWriterGeneralRegistry.json");
         try {
@@ -67,13 +67,13 @@ class JsonReaderTest extends JsonTest {
             checkChild("David Lovelace", caregiver1, child1.getAuthorizedToPickUp(), child1.getCheckInTime(),
                     child1.getCheckOutTime(), attendanceSheet.getNotCheckedIn().get(0));
             checkChild("Jane Lovelace", caregiver1, child2.getAuthorizedToPickUp(), child2.getCheckInTime(),
-                    child2.getCheckOutTime(), attendanceSheet.getCheckedIn().get(0));
+                    child2.getCheckOutTime(), attendanceSheet.getCheckedOut().get(0));
             checkChild("Emily Smith", caregiver2, child3.getAuthorizedToPickUp(), child3.getCheckInTime(),
-                    child3.getCheckOutTime(), attendanceSheet.getCheckedOut().get(0));
+                    child3.getCheckOutTime(), attendanceSheet.getCheckedIn().get(0));
 
             checkRegistry("CPSC 210", registry.getChildRegistry(), registry.getCaregiverRegistry(), registry);
             assertEquals(3, registry.getChildRegistry().size());
-            assertEquals(2, registry.getCaregiverRegistry().size());
+            assertEquals(3, registry.getCaregiverRegistry().size());
             checkCaregiver("Ada Lovelace", 7788221234L, "alovelace@gmail.com",
                     registry.getCaregiverRegistry().get(0));
             checkCaregiver("John Smith", 6043331234L, "jsmith@yahoo.com",
