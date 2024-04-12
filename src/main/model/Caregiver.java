@@ -19,7 +19,6 @@ public class Caregiver implements Writable {
         this.fullName = fullName;
         this.phoneNum = phoneNum;
         this.email = email;
-//        EventLog.getInstance().logEvent(new Event("New caregiver created: " + this.fullName));
     }
 
     @Override

@@ -22,12 +22,13 @@
             "fullName": "David Lovelace"
         },
         {
+            "checkOutCaregiverName": "Adam Lovelace",
             "primaryCaregiver": {
                 "fullName": "Ada Lovelace",
                 "phoneNum": 7788221234,
                 "email": "alovelace@gmail.com"
             },
-            "checkOutTime": "22:12:55.813641400",
+            "checkOutTime": "02:10:37.955516200",
             "authorizedToPickUp": [
                 {
                     "fullName": "Ada Lovelace",
@@ -40,9 +41,8 @@
                     "email": "adaml@gmail.com"
                 }
             ],
-            "checkInTime": "22:12:55.813641400",
-            "fullName": "Jane Lovelace",
-            "checkOutCaregiver": "model.Caregiver@231f98ef"
+            "checkInTime": "02:10:37.955516200",
+            "fullName": "Jane Lovelace"
         },
         {
             "primaryCaregiver": {
@@ -55,7 +55,7 @@
                 "phoneNum": 6043331234,
                 "email": "jsmith@yahoo.com"
             }],
-            "checkInTime": "22:12:55.813641400",
+            "checkInTime": "02:10:37.955516200",
             "fullName": "Emily Smith"
         }
     ],

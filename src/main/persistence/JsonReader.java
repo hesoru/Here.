@@ -46,8 +46,8 @@ public class JsonReader {
         String registryName = registryJsonObject.getString("name");
         Registry registry = new Registry(registryName);
         addPeopleToRegistry(registry, registryJsonObject);
-//        EventLog.getInstance().logEvent(new Event(registry.getName() + " registry data loaded from "
-//                + registrySource));
+        EventLog.getInstance().logEvent(new Event(registry.getName()
+                + " registry data loaded into registry from " + registrySource));
         return registry;
     }
 
@@ -60,15 +60,11 @@ public class JsonReader {
             JSONObject nextCaregiver = (JSONObject) json;
             addCaregiverToRegistry(registry, nextCaregiver);
         }
-//        EventLog.getInstance().logEvent(new Event(registry.getName() + " caregiver registry data loaded from "
-//                + registrySource));
         JSONArray jsonArrayChildRegistry = registryJsonObject.getJSONArray("childRegistry");
         for (Object json : jsonArrayChildRegistry) {
             JSONObject nextChild = (JSONObject) json;
             addChildToRegistry(registry, nextChild);
         }
-//        EventLog.getInstance().logEvent(new Event(registry.getName() + " child registry data loaded from "
-//                + registrySource));
     }
 
     // MODIFIES: Registry, Caregiver
@@ -97,25 +93,27 @@ public class JsonReader {
     // MODIFIES: Child
     // EFFECTS: Parses child from JSON object and returns it.
     private Child parseChild(JSONObject childJsonObject, Registry registry) {
-        String fullName = childJsonObject.getString("fullName");
-        Caregiver registryPrimaryCaregiver
-                = parseCaregiverFromRegistry(childJsonObject.getJSONObject("primaryCaregiver"), registry);
-        LocalTime checkInTime;
-        LocalTime checkOutTime;
+        LocalTime checkInTime = null;
+        LocalTime checkOutTime = null;
+        String checkOutCaregiverName = null;
         if (!childJsonObject.isNull("checkInTime")) {
             checkInTime = LocalTime.parse(childJsonObject.getString("checkInTime"));
-        } else {
-            checkInTime = null;
         }
         if (!childJsonObject.isNull("checkOutTime")) {
             checkOutTime = LocalTime.parse(childJsonObject.getString("checkOutTime"));
-        } else {
-            checkOutTime = null;
         }
-        Child child = new Child(fullName, registryPrimaryCaregiver);
+        if (!childJsonObject.isNull("checkOutCaregiverName")) {
+            checkOutCaregiverName = childJsonObject.getString("checkOutCaregiverName");
+        }
+
+        Child child = new Child(childJsonObject.getString("fullName"),
+                parseCaregiverFromRegistry(childJsonObject.getJSONObject("primaryCaregiver"), registry));
         addMultipleSecondaryCaregivers(child, childJsonObject, registry);
         child.setCheckInTime(checkInTime);
         child.setCheckOutTime(checkOutTime);
+        if (checkOutCaregiverName != null) {
+            child.setCheckOutCaregiverName(checkOutCaregiverName);
+        }
         return child;
     }
 
@@ -154,9 +152,14 @@ public class JsonReader {
     // EFFECTS: Reads attendance sheet from file and returns it;
     //          throws IOException if an error occurs reading data from file.
     public AttendanceSheet readAttendance(Registry registry) throws IOException {
-        String attendanceJsonData = readFile(attendanceSource);
-        JSONObject attendanceJsonObject = new JSONObject(attendanceJsonData);
-        return parseAttendanceSheet(attendanceJsonObject, registry);
+        try {
+            String attendanceJsonData = readFile(attendanceSource);
+            JSONObject attendanceJsonObject = new JSONObject(attendanceJsonData);
+            return parseAttendanceSheet(attendanceJsonObject, registry);
+        } catch (IOException e) {
+            EventLog.getInstance().logEvent(new Event("Unable to read from file: " + attendanceSource));
+        }
+        return null;
     }
 
     // EFFECTS: Parses attendance sheet from JSON object and returns it.
@@ -164,8 +167,8 @@ public class JsonReader {
         String attendanceName = attendanceJsonObject.getString("name");
         AttendanceSheet attendanceSheet = new AttendanceSheet(attendanceName);
         addChildrenFromRegistryToAttendanceSheet(attendanceSheet, registry, attendanceJsonObject);
-//        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
-//                + " attendance sheet data loaded from " + attendanceSource));
+        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
+                + " attendance sheet data loaded into attendance sheet from " + attendanceSource));
         return attendanceSheet;
     }
 

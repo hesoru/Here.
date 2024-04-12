@@ -185,15 +185,7 @@ public class RegistryTab extends Tab {
     //          confirmation, returns the user to the options. Prints if entered caregiver is a primary caregiver for an
     //          existing child, and does not remove caregiver from registry.
     private void removeCaregiverFromRegistry() {
-        String caregiverRemovedOrChildFullName = getController().getRegistry().removeCaregiver(caregiverName, "yes");
-
-        if (caregiverRemovedOrChildFullName.equals("caregiver removed")) {
-            System.out.println(caregiverName + " removed from the caregiver registry.\n");
-        } else {
-            // !!!
-            System.out.println(caregiverName + " is the primary caregiver listed for "
-                    + caregiverRemovedOrChildFullName + ".\n" + "Remove this child before removing their caregiver.\n");
-        }
+        getController().getRegistry().removeCaregiver(caregiverName, "yes");
     }
 
     public void placeSettingsButtons() {

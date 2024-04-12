@@ -1,6 +1,8 @@
 package persistence;
 
 import model.AttendanceSheet;
+import model.Event;
+import model.EventLog;
 import model.Registry;
 import org.json.JSONObject;
 
@@ -31,11 +33,11 @@ public class JsonWriter {
         JSONObject attendanceJson = attendanceSheet.toJson();
         JSONObject registryJson = registry.toJson();
         attendanceWriter.print(attendanceJson.toString(TAB));
-//        EventLog.getInstance().logEvent(new Event(registry.getName() + " registry data written to file at "
-//                + registryDestination));
+        EventLog.getInstance().logEvent(new Event(registry.getName() + " registry data written to file: "
+                + registryDestination));
         registryWriter.print(registryJson.toString(TAB));
-//        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
-//                + " attendance sheet data written to file at " + attendanceDestination));
+        EventLog.getInstance().logEvent(new Event(attendanceSheet.getName()
+                + " attendance sheet data written to file: " + attendanceDestination));
 
         attendanceWriter.close();
         registryWriter.close();

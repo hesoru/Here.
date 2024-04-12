@@ -168,7 +168,7 @@ public class AttendanceSheetTab extends Tab {
             if (selected != -1) {
                 childToCheckOutName = checkedInSheet.getValueAt(selected, 0).toString();
                 childToCheckOut = getController().getRegistry().selectChild(childToCheckOutName);
-                new SelectAuthorizedCaregiverWindow(attendanceSheetWindow, this, getController(), selected);
+                new AuthorizedCaregiverSelectionWindow(attendanceSheetWindow, this, getController(), selected);
             }
         });
     }
@@ -182,7 +182,7 @@ public class AttendanceSheetTab extends Tab {
             Object[] o = new Object[3];
             o[0] = c.getFullName();
             o[1] = c.getCheckOutTime();
-            o[2] = c.getCheckOutCaregiver();
+            o[2] = c.getCheckOutCaregiverName();
             checkedOutSheetModel.addRow(o);
         }
         attendanceSheetWindow.setCheckedOutSheetModel(checkedOutSheetModel);

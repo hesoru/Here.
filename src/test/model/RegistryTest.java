@@ -153,7 +153,7 @@ public class RegistryTest {
 
     @Test
     public void testRemoveCaregiverPrimaryCaregiverFound() {
-        assertEquals("Jane Lovelace", registry.removeCaregiver("Ada Lovelace", "yes"));
+        assertEquals("David Lovelace", registry.removeCaregiver("Ada Lovelace", "yes"));
         assertEquals("Emily Smith", registry.removeCaregiver("John Smith", "yes"));
         assertEquals("Lily Santos", registry.removeCaregiver("Charlie Santos", "yes"));
 

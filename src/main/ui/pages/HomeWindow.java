@@ -1,10 +1,12 @@
 package ui.pages;
 
+import model.EventLog;
 import ui.AttendanceUI;
 import ui.ButtonNames;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 // Creates home window, where the user can choose to open the registry, attendance sheet, or save app data.
 public class HomeWindow extends Window {
@@ -21,16 +23,27 @@ public class HomeWindow extends Window {
 
     // REQUIRES: argument must exist (!=null)
     // EFFECTS: Constructs home window, where the user can choose to open the registry, attendance sheet, or save
-    //          app data.
+    //          app data. Prints event log upon closing window.
     public HomeWindow(AttendanceUI controller) {
         super("Home", controller);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
 
         panel0 = new JPanel();
         panel0.setLayout(new GridBagLayout());
         grid0 = new GridBagConstraints();
         grid0.fill = GridBagConstraints.HORIZONTAL;
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                for (model.Event event : EventLog.getInstance()) {
+                    System.out.println(event);
+                }
+                EventLog.getInstance().clear();
+                System.exit(0);
+            }
+        });
 
         placeImage();
         placeInstruction();

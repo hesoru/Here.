@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 // Creates window that allows user to select authorized caregiver picking up a child
-public class SelectAuthorizedCaregiverWindow extends Window {
+public class AuthorizedCaregiverSelectionWindow extends Window {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 525;
@@ -28,9 +28,9 @@ public class SelectAuthorizedCaregiverWindow extends Window {
 
     // REQUIRES: Arguments must exist (!=null), rowToRemove must be an existing row index
     // EFFECTS: Constructs window that allows user to select authorized caregiver picking up a child
-    public SelectAuthorizedCaregiverWindow(AttendanceSheetWindow attendanceSheetWindow,
-                                           AttendanceSheetTab attendanceSheetTab, AttendanceUI controller,
-                                           int rowToRemove) {
+    public AuthorizedCaregiverSelectionWindow(AttendanceSheetWindow attendanceSheetWindow,
+                                              AttendanceSheetTab attendanceSheetTab, AttendanceUI controller,
+                                              int rowToRemove) {
         super("Select Authorized Caregiver", controller);
         this.attendanceSheetWindow = attendanceSheetWindow;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

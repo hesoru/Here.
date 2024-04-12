@@ -62,12 +62,8 @@ public class AttendanceUI extends JFrame {
     public void saveState() {
         try {
             jsonWriter.write(attendanceSheet, registry);
-            System.out.println("Saved " + attendanceSheet.getName() + " attendance sheet to "
-                    + JSON_STORE_ATTENDANCE + "\n");
-            System.out.println("Saved " + registry.getName() + " registry to " + JSON_STORE_REGISTRY + "\n");
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file:" + JSON_STORE_ATTENDANCE + " and "
-                    + JSON_STORE_REGISTRY + "\n");
+            System.out.println("Unable to write to files - files not found.");
         }
     }
 
@@ -77,12 +73,8 @@ public class AttendanceUI extends JFrame {
         try {
             this.registry = jsonReader.readRegistry();
             this.attendanceSheet = jsonReader.readAttendance(registry);
-            System.out.println("Loaded " + attendanceSheet.getName() + " attendance sheet from "
-                    + JSON_STORE_ATTENDANCE + "\n");
-            System.out.println("Loaded " + registry.getName() + " registry from " + JSON_STORE_REGISTRY + "\n");
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE_ATTENDANCE + " and "
-                    + JSON_STORE_REGISTRY + "\n");
+            System.out.println("Loading app data failed.");
         }
     }
 
@@ -104,7 +96,6 @@ public class AttendanceUI extends JFrame {
         return attendanceSheet;
     }
 
-    // TODO:
 //    // REQUIRES: childFullName and caregiverFullName are first and last name separated by a space
 //    //           (case-sensitive), and child exists in childRegistry (!null).
 //    // MODIFIES: Child, Caregiver (Caregiver only if caregiver entered not found in caregiverRegistry)

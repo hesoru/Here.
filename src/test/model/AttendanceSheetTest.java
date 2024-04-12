@@ -206,9 +206,9 @@ public class AttendanceSheetTest {
         assertEquals("child checked out", attendanceSheet.checkOut(c2, cg3));
         assertEquals("child checked out", attendanceSheet.checkOut(c3, cg2));
 
-        assertEquals(cg1, c1.getCheckOutCaregiver());
-        assertEquals(cg3, c2.getCheckOutCaregiver());
-        assertEquals(cg2, c3.getCheckOutCaregiver());
+        assertEquals(cg1.getFullName(), c1.getCheckOutCaregiverName());
+        assertEquals(cg3.getFullName(), c2.getCheckOutCaregiverName());
+        assertEquals(cg2.getFullName(), c3.getCheckOutCaregiverName());
     }
 
     @Test
@@ -307,15 +307,15 @@ public class AttendanceSheetTest {
         attendanceSheet.checkOut(c1, cg1);
         attendanceSheet.checkOut(c2, cg3);
         attendanceSheet.checkOut(c3, cg2);
-        assertEquals(cg1, c1.getCheckOutCaregiver());
-        assertEquals(cg3, c2.getCheckOutCaregiver());
-        assertEquals(cg2, c3.getCheckOutCaregiver());
+        assertEquals(cg1.getFullName(), c1.getCheckOutCaregiverName());
+        assertEquals(cg3.getFullName(), c2.getCheckOutCaregiverName());
+        assertEquals(cg2.getFullName(), c3.getCheckOutCaregiverName());
 
         attendanceSheetEmpty.reset("yes", registry.getChildRegistry());
 
-        assertEquals(null, c1.getCheckOutCaregiver());
-        assertEquals(null, c2.getCheckOutCaregiver());
-        assertEquals(null, c3.getCheckOutCaregiver());
+        assertEquals(null, c1.getCheckOutCaregiverName());
+        assertEquals(null, c2.getCheckOutCaregiverName());
+        assertEquals(null, c3.getCheckOutCaregiverName());
     }
 
     @Test

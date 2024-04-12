@@ -6,6 +6,7 @@ import model.Child;
 import model.Registry;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,8 +22,8 @@ public class JsonWriterTest extends JsonTest {
             JsonWriter writer = new JsonWriter("./data/my\0illegal:attendancefileName.json",
                     "./data/my\0illegal:registryfileName.json");
             writer.write(attendanceSheet, registry);
-            fail("IOException was expected");
-        } catch (IOException e) {
+            fail("FileNotFoundException was expected");
+        } catch (FileNotFoundException e) {
             // pass
         }
     }

@@ -77,14 +77,14 @@ class ChildTest {
 
     @Test
     public void testSetCheckOutCaregiver() {
-        c1.setCheckOutCaregiver(cg1);
-        assertEquals(cg1, c1.getCheckOutCaregiver());
+        c1.setCheckOutCaregiverName(cg1.getFullName());
+        assertEquals(cg1.getFullName(), c1.getCheckOutCaregiverName());
 
-        c2.setCheckOutCaregiver(cg3);
-        assertEquals(cg3, c2.getCheckOutCaregiver());
+        c2.setCheckOutCaregiverName(cg3.getFullName());
+        assertEquals(cg3.getFullName(), c2.getCheckOutCaregiverName());
 
-        c3.setCheckOutCaregiver(cg2);
-        assertEquals(cg2, c3.getCheckOutCaregiver());
+        c3.setCheckOutCaregiverName(cg2.getFullName());
+        assertEquals(cg2.getFullName(), c3.getCheckOutCaregiverName());
     }
 
     @Test
